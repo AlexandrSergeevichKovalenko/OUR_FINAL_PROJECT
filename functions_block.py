@@ -75,10 +75,14 @@ def show_birthday(args, book):
             return f"{name} does not have a birthday set."
 
 # forming a string of names of the persons, who should be congratulated and their respective birthday dates.
-def birthdays(book):
-    str = ""
-    if len(book.get_upcoming_birthdays()) != 0:
-        for i in book.get_upcoming_birthdays():
+def birthdays(book, args):
+    str = ""    
+    if args:
+        days = args[0]
+    else:
+        days = 7      
+    if len(book.get_upcoming_birthdays(days)) != 0:
+        for i in book.get_upcoming_birthdays(days):
             str += f"{i}\n"
         return str
     else:

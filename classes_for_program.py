@@ -147,7 +147,7 @@ class AddressBook(UserDict):
             return AddressBook.find_next_weekday(birthday, 0)
         return birthday
 
-    def get_upcoming_birthdays(self, days=7):
+    def get_upcoming_birthdays(self, days = 7):
         """
         Return a list of upcoming birthdays within the next 7 days.
         If birthday falls on weekend, shift congratulations to Monday.
@@ -163,7 +163,7 @@ class AddressBook(UserDict):
                 if birthday_this_year < today:
                     birthday_this_year = dict_record.birthday.value.replace(year=today.year + 1).date() 
 
-                if 0 <= (birthday_this_year - today).days <= days:
+                if 0 <= (birthday_this_year - today).days <= int(days):
                     congratulation_date = AddressBook.adjust_for_weekend(birthday_this_year)
                     upcoming_birthdays.append({"name": user, "birthday": AddressBook.date_to_string(congratulation_date)})
         return upcoming_birthdays

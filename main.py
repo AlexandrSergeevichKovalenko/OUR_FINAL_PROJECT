@@ -23,7 +23,7 @@ def print_help():
         "all": "Show all contacts",
         "add-birthday [name] [DD.MM.YYYY]": "Add birthday to a contact",
         "show-birthday [name]": "Show birthday for a contact",
-        "birthdays": "Show upcoming birthdays in the next 7 days",
+        "birthdays [days]": "Show upcoming birthdays in the next [N] days",
         "hello": "Get a greeting from the bot",
         "close / exit": "Exit the program"
     }
@@ -57,7 +57,7 @@ def main():
         while True:
             user_input = input("Enter a command: ")
             command, *args = parse_input(user_input)
-
+            
             if command in ["close", "exit"]:
                 print("Good bye!")
                 break
@@ -87,7 +87,7 @@ def main():
                 print(show_birthday(args, book))
 
             elif command == "birthdays":
-                print(birthdays(book))
+                print(birthdays(book, args))
             
             else:
                 print("Invalid command.")
