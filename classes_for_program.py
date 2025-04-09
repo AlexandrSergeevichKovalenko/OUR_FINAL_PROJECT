@@ -3,7 +3,7 @@ from datetime import datetime, date, timedelta
 import re
 from pathlib import Path
 
-#global variable(name of the file) for storaging all programm progress 
+#global variable(name of the file) for storaging all program progress
 FILENAME = Path("addressbook.pkl")
 
 # ========================= BASE FIELD AND ITS SUBCLASSES ==========================
@@ -48,6 +48,30 @@ class Phone(Field):
     def validate(number):
         return True if number.isdigit() and len(number) == 10 else False
 
+class Email(Field):
+    """
+    Represents an email address with validation.
+
+    Validation requirements:
+    - The local part (before '@') can consist of lowercase letters, digits, and underscore.
+    - The local part must include at least one lowercase letter.
+    - The domain (after '@') must include only lowercase letters.
+    - The extension (after '.') must consist only of lowercase letters.
+
+    Example of valid email: user_123@example.com
+    """
+
+    def __init__(self, value):
+        if not self.validate(value):
+            raise ValueError("Invalid email format. Please use a valid email address like user_123@example.com")
+        super().__init__(value)
+
+    @staticmethod
+    def validate(email: str) -> bool:
+        # The lookahead (?=[a-z0-9_]*[a-z]) ensures that the local part contains at least one letter
+        pattern = r'^(?=[a-z0-9_]*[a-z])[a-z0-9_]+@[a-z]+\.[a-z]+$'
+        return re.fullmatch(pattern, email) is not None
+
 # =========================== RECORD AND ADDRESSBOOK ===========================
 
 class Record:
@@ -56,12 +80,13 @@ class Record:
     - required name (Name)
     - optional birthday (Birthday)
     - multiple phones (Phone)
+    - optional email (Email)
     """
     def __init__(self, name):
         self.name = Name(name)
         self.phones = []
         self.birthday = None
-    
+        self.email = None
 
     def add_birthday(self, data: str):
         """Set or update the contact's birthday."""
@@ -73,7 +98,9 @@ class Record:
         phone = Phone(phone_number)
         self.phones.append(phone)
     
-
+    # !!!
+    # I don't see any use of this method
+    # !!!
     def remove_phone(self, phone_number: str):
         """Remove an existing phone number from the contact."""
         self.phones = [phone for phone in self.phones if phone.value !=phone_number]
@@ -98,10 +125,29 @@ class Record:
                 return phone
         raise ValueError("The number was not found")
 
+    def add_email(self, email_address: str):
+        """
+        Adds or updates the contact's email.
+        """
+        self.email = Email(email_address)
+
+    def edit_email(self, new_email: str):
+        """
+        Replaces the existing email with a new email address.
+        """
+        self.email = Email(new_email)
+
+    def remove_email(self):
+        """
+        Removes the contact's email.
+        """
+        self.email = None
+
     def __str__(self):
         birthday_str = self.birthday.value.strftime("%d.%m.%Y") if self.birthday else "N/A"
         phones_string = '; '.join(p.value for p in self.phones)
-        return f"Contact name: {self.name.value}, phones: {phones_string}, birthday: {birthday_str}"
+        email_str = self.email.value if self.email else "N/A"
+        return f"Contact name: {self.name.value}, phones: {phones_string}, birthday: {birthday_str}, email: {email_str}"
 
 
 class AddressBook(UserDict):
@@ -177,6 +223,3 @@ class AddressBook(UserDict):
             output.append(contact_description_line)
         total_info_line = "\n".join(output)
         return total_info_line
-
-    
-    

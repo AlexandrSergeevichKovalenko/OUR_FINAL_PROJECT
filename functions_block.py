@@ -49,7 +49,7 @@ def show_all(book: AddressBook):
 @input_error(expected_arg_count=2)
 def add_birthday(args, book):
     name, birthday_day, *_ = args
-    message = "Birthday adedd."
+    message = "Birthday added."
     record = book.find(name)
 
     if record is None:
@@ -73,6 +73,60 @@ def show_birthday(args, book):
             return f"{name}'s birthday is on {record.birthday.value.strftime('%d.%m.%Y')}"
         else:
             return f"{name} does not have a birthday set."
+
+@input_error(expected_arg_count=2)
+def add_email(args, book: AddressBook):
+    """
+    Adds or updates the email for a contact.
+    Usage: add-email [name] [email]
+    """
+    name, email_address, *_ = args
+    record = book.find(name)
+    if record is None:
+        record = Record(name)
+        book.add_record(record)
+    record.add_email(email_address)
+    return "Email added/updated."
+
+
+@input_error(expected_arg_count=2)
+def change_email(args, book: AddressBook):
+    """
+    Changes the email for an existing contact.
+    Usage: change-email [name] [new_email]
+    """
+    name, new_email, *_ = args
+    record = book.find(name)
+    if record is None or not record.email:
+        return f"No existing email found for contact '{name}'. Use 'add-email' to add an email."
+    record.edit_email(new_email)
+    return "Email updated."
+
+
+@input_error(expected_arg_count=1)
+def show_email(args, book: AddressBook):
+    """
+    Shows the email for a contact.
+    Usage: show-email [name]
+    """
+    name, *_ = args
+    record = book.find(name)
+    if record is None or not record.email:
+        return f"No email found for contact '{name}'."
+    return f"{name}'s email: {record.email.value}"
+
+@input_error(expected_arg_count=1)
+def remove_email(args, book: AddressBook):
+    """
+    Removes the email for a contact.
+    Usage: remove-email [name]
+    """
+    name, *_ = args
+    record = book.find(name)
+    if record is None or record.email is None:
+        return f"No email to remove for contact '{name}'."
+    record.remove_email()
+    return "Email removed."
 
 # forming a string of names of the persons, who should be congratulated and their respective birthday dates.
 def birthdays(book, args):
@@ -101,15 +155,6 @@ def load_data():
             with open(FILENAME, "rb") as record_file:
                 return pickle.load(record_file)
         except (pickle.UnpicklingError, EOFError, FileNotFoundError):
-            print("A mistake occured trying to load the data")
+            print("A mistake occurred trying to load the data")
     
     return AddressBook()
-
-
-
-
-
-
-
-
-

@@ -1,15 +1,16 @@
 # decorator function
 def input_error(expected_arg_count=None):
-    
+
     # dictionary with possible errors
     error_messages = {
         "ValueError": "Please provide a valid name and phone number.",
-        "IncorrectDataInput": "Please provide correct information: comand Name phone",
+        "IncorrectDataInput": "Please provide correct information: command Name phone",
         "TypeError": "Invalid input type",
         "IndexError": "You did not provide arguments to proceed.",
-        "NoNameError": "You did not provide name whos phone you want to see",
+        "NoNameError": "You did not provide name whose phone you want to see",
         "InvalidName": "Invalid format for name. Please use alphabetic characters only.",
-        "InvalidPhone": "Invalid format for phone. Please use numeric characters only."
+        "InvalidPhone": "Invalid format for phone. Please use numeric characters only.",
+        "InvalidEmail": "Invalid email format. Please use a valid email address like user_123@example.com."
     }
 
     def decorator(func):
@@ -23,18 +24,22 @@ def input_error(expected_arg_count=None):
                 if expected_arg_count is not None and len(args[0]) != expected_arg_count:
                     if func.__name__ in ["add_contact", "change_contact"]:
                         raise ValueError(error_messages["IncorrectDataInput"])
-                # checking additionaly some spesific functions
+                # checking additionally some specific functions
                 if func.__name__ in ["add_contact", "change_contact"]:
                     if not args[0][0].isalpha():
                         raise ValueError(error_messages["InvalidName"])
                     if not args[0][1].isdigit():
                         raise ValueError(error_messages["InvalidPhone"])
-                
+                # Checking email for add_email and change_email functions
+                if func.__name__ in ["add_email", "change_email"]:
+                    if "@" not in args[0][1] or "." not in args[0][1]:
+                        raise ValueError(error_messages["InvalidEmail"])
+
                 return func(*args, **kwargs)
-            
+
             except Exception as e:
                 return str(e)
-        
+
         return inner
-    
+
     return decorator
