@@ -223,3 +223,66 @@ class AddressBook(UserDict):
             output.append(contact_description_line)
         total_info_line = "\n".join(output)
         return total_info_line
+    
+# =========================== Note AND NoteBook ===========================
+
+class Note:
+    """
+    Represents a note with a title, optional note text, and tags.
+    Supports adding notes and tags.
+    """
+    def __init__(self, title, note = None):
+        self.title = title
+        self.tags = []
+        self.note = note
+
+    def add_note(self, note):
+        """Set or update the note text."""
+        self.note = note
+
+    def add_tags(self, tags):
+        """Add tags to the note."""
+        tags.sort()
+        for tag in tags:
+            if tag not in self.tags:
+                self.tags.append(tag)
+
+    def __str__(self):
+        if self.tags:
+            return (f"""{"✨"} Title: {self.title}
+{"📜"} Note: {self.note}
+{"🏷️"} Tage: {",".join(tag for tag in self.tags)}""")
+        else:
+            return (f"""{"✨"}Title: {self.title}
+{"📜"}Note: {self.note}""")
+
+
+class NoteBook(UserDict):
+
+    """
+    A container for storing and managing multiple notes
+    Supports:
+    - add, find, delete notes
+    """
+    def add_record(self, note: Note):
+        """Add a Note instance to the notebook."""
+        self.data[note.title] = note
+
+    def find(self, title: str) -> Note:
+        """Find a note by title. Returns the Note or None."""
+        if title in self.data:
+            return self.data[title]
+        return None
+    
+    def sorted_notes_by_tags(self):
+        """Sort notes by tags."""
+        return sorted(self.data.values(), key=lambda x: x.tags)
+
+    def delete(self, title:str) -> None:
+        """Delete a note by title, if it exists."""
+        if title in self.data:
+            del self.data[title]
+
+    def __str__(self):
+        return '\n'.join(str(note) for note in self.data.values())
+    
