@@ -10,20 +10,15 @@ The **Personal Assistant** is a console-based application designed to manage an 
 
 We are a group of students-developers working collaboratively to create a helpful assistant for everyday tasks.
 
-| Name | Role |
-|------|------|
-| [Kovalenko Oleksandr] | Team Lead / Presenter |
-| [Shadrunov Oleg] | Scram Master |
-| [Shcherbak Oleksii] | The one of the two best Developers |
-| [Holenok Oleksandr] | The second one of the two best Developers |
+### 👥 Team
 
-`Developer` - [Shcherbak Oleksii](https://github.com/oleksii-shcherbak/GoIt/tree/main/homework/goit-pycore-hw-08)
+| Name                  | Role                             | GitHub Profile |
+|-----------------------|----------------------------------|----------------|
+| Kovalenko Oleksandr   | Team Lead / Presenter            | [AlexandrSergeevichKovalenko](https://github.com/AlexandrSergeevichKovalenko) |
+| Shadrunov Oleg        | Scrum Master                     | [Oleg-DA7](https://github.com/Oleg-DA7/goit-pycore-hw-08) |
+| Shcherbak Oleksii     | Developer 💻 (One of the best)    | [oleksii-shcherbak](https://github.com/oleksii-shcherbak/GoIt/tree/main/homework/goit-pycore-hw-08) |
+| Holenok Oleksandr     | Developer 💻 (The other best one) | [4attye](https://github.com/4attye) |
 
-`Developer` - [Holenok Oleksandr](https://github.com/4attye)
-
-`Team Lead` - [Kovalenko Oleksandr](https://github.com/AlexandrSergeevichKovalenko)
-
-`Scrum Master` - [Shadrunov Oleg](https://github.com/Oleg-DA7/goit-pycore-hw-08)
 
 ## 🎯 Project Goal
 

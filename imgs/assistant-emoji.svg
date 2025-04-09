@@ -1,0 +1,19 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Круглое лицо -->
+  <circle cx="50" cy="50" r="45" fill="#FFD166" stroke="#FF9F1C" stroke-width="2"/>
+  
+  <!-- Глаза -->
+  <circle cx="35" cy="40" r="7" fill="#2A2D34"/>
+  <circle cx="65" cy="40" r="7" fill="#2A2D34"/>
+  
+  <!-- Блики в глазах -->
+  <circle cx="32" cy="37" r="2" fill="white"/>
+  <circle cx="62" cy="37" r="2" fill="white"/>
+  
+  <!-- Улыбка -->
+  <path d="M 30 60 Q 50 75 70 60" fill="none" stroke="#2A2D34" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Гарнитура -->
+  <path d="M 20 40 C 10 20 5 40 15 50" fill="none" stroke="#2A2D34" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="15" cy="50" r="4" fill="#2A2D34"/>
+</svg>
