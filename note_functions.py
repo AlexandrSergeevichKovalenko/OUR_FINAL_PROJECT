@@ -1,5 +1,10 @@
 from classes_for_program import *
-import re
+from rich.panel import Panel
+from rich.text import Text
+from rich.console import Console
+from colorama import Fore
+
+console = Console()
 
 def add_note(book):
     """
@@ -8,16 +13,15 @@ def add_note(book):
     If a note with the same title exists, prompts to replace it.
     """
     while True:
-        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:")
+        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:").lower()
         if title == "back":
-            print("Back to main menu.")
-            break
+            return "Back to main menu."
         elif title:
             note = input(f"{"📜"} Enter a note:")
             tags = input(f"{"🏷️"} Enter a tags or (n):")
             if tags != "n":
-                pattern = r"[ ,]"
-                tags = re.split(pattern, tags)
+                tags = tags.split(",")
+                tags = [tag.strip() for tag in tags]
             else:
                 tags = None
 
@@ -50,10 +54,9 @@ def change_note(book):
     If the note does not exist, returns a failure message.
     """
     while True:
-        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:")
+        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:").lower()
         if title == "back":
-            print("Back to main menu.")
-            break
+            return "Back to main menu."
         elif title:
             record = book.find(title)
             if record:
@@ -70,10 +73,9 @@ def show_note(book):
     If the note does not exist, returns a failure message.
     """
     while True:
-        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:")
+        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:").lower()
         if title == "back":
-            print("Back to main menu.")
-            break
+            return "Back to main menu."
         elif title:
             record = book.find(title)
             return f"{"📜"} {record.note}" if record else "Note not found."
@@ -93,10 +95,9 @@ def remove_note(book):
     If the note does not exist, returns a failure message.
     """
     while True:
-        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:")
+        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:").lower()
         if title == "back":
-            print("Back to main menu.")
-            break
+            return "Back to main menu."
         elif title:
             record = book.find(title)
             if record:
@@ -104,3 +105,26 @@ def remove_note(book):
                 return "Note removed."
             return "Note not found."
         print("Please enter a title.")
+
+def sorted_notes_by_tags(book):
+    """
+    Sort notes by tags.
+    If the notebook is empty, returns a message indicating so.
+    If the notebook is not empty, sort the notes by tags and returns them.
+    """
+    if book:
+        sorted_note = book.sorted_notes_by_tags()
+        panels = [
+            Panel(
+                Text(str(note), style="bold dark_blue", no_wrap=True),
+                style="on light_green",
+                border_style="dark_green",
+                expand=False)  for note in sorted_note]
+        print("--" * 40)
+        console.print(Text("Notes sorted by tags", style="bold dark_blue"))
+        for panel in panels:
+            console.print(panel)
+            print()
+        print("--" * 40)
+    else:
+        print(f"{Fore.RED}NoteBook is empty{Fore.RESET}")

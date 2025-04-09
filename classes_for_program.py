@@ -186,21 +186,25 @@ class Note:
     """
     def __init__(self, title, note = None):
         self.title = title
-        self.tags = set()
+        self.tags = []
         self.note = note
 
     def add_note(self, note):
+        """Set or update the note text."""
         self.note = note
 
     def add_tags(self, tags):
-        self.tags.update(tags)
+        """Add tags to the note."""
+        tags.sort()
+        for tag in tags:
+            if tag not in self.tags:
+                self.tags.append(tag)
 
     def __str__(self):
         if self.tags:
-            tags = sorted(list(self.tags))
             return (f"""{"✨"} Title: {self.title}
 {"📜"} Note: {self.note}
-{"🏷️"} Tage: {",".join(tag for tag in tags)}""")
+{"🏷️"} Tage: {",".join(tag for tag in self.tags)}""")
         else:
             return (f"""{"✨"}Title: {self.title}
 {"📜"}Note: {self.note}""")
@@ -222,6 +226,10 @@ class NoteBook(UserDict):
         if title in self.data:
             return self.data[title]
         return None
+    
+    def sorted_notes_by_tags(self):
+        """Sort notes by tags."""
+        return sorted(self.data.values(), key=lambda x: x.tags)
 
     def delete(self, title:str) -> None:
         """Delete a note by title, if it exists."""
@@ -229,5 +237,5 @@ class NoteBook(UserDict):
             del self.data[title]
 
     def __str__(self):
-        return '\n'.join(str(record) for record in self.data.values())
+        return '\n'.join(str(note) for note in self.data.values())
     

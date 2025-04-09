@@ -4,7 +4,6 @@ from contextlib import contextmanager
 from functions_block import load_data, save_data
 from note_functions import *
 
-
 def parse_input(user_input):
     """
     parsing a console line 
@@ -44,7 +43,7 @@ def record_manager():
     try:
         yield book
     finally:
-        save_data(book)
+        save_data(book) 
 
 
 def main():
@@ -93,6 +92,9 @@ def main():
 
             elif command == "change-note":
                 print(change_note(notebook))
+
+            elif command == "sorted-notes-by-tags":
+                sorted_notes_by_tags(notebook)
 
             elif command == "remove-note":
                 print(remove_note(notebook))
