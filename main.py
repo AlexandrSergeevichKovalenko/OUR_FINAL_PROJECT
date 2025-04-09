@@ -24,6 +24,11 @@ def print_help():
         "add-birthday [name] [DD.MM.YYYY]": "Add birthday to a contact",
         "show-birthday [name]": "Show birthday for a contact",
         "birthdays [days]": "Show upcoming birthdays in the next [N] days",
+        "birthdays": "Show upcoming birthdays in the next 7 days",
+        "add-email [name] [email]": "Add or update email for a contact",
+        "change-email [name] [new_email]": "Change email for a contact",
+        "show-email [name]": "Show email for a contact",
+        "remove-email [name]": "Remove email from a contact",
         "hello": "Get a greeting from the bot",
         "close / exit": "Exit the program"
     }
@@ -73,13 +78,13 @@ def main():
 
             elif command == "change":
                 print(change_contact(args, book))
-            
+
             elif command == "phone":
                 print(show_phone(args, book))
-            
+
             elif command == "all":
                 print(show_all(book))
-            
+
             elif command == "add-birthday":
                 print(add_birthday(args, book))
 
@@ -88,7 +93,19 @@ def main():
 
             elif command == "birthdays":
                 print(birthdays(book, args))
-            
+
+            elif command == "add-email":
+                print(add_email(args, book))
+
+            elif command == "change-email":
+                print(change_email(args, book))
+
+            elif command == "show-email":
+                print(show_email(args, book))
+
+            elif command == "remove-email":
+                print(remove_email(args, book))
+
             else:
                 print("Invalid command.")
 
