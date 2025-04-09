@@ -86,7 +86,7 @@ OUR_FINAL_PROJECT/
 
 ## 🚀 How to Run
 
-git clone https://github.com/AlexandrSergeevichKovalenko/OUR_FINAL_PROJECT/tree/main.git
+git clone https://github.com/AlexandrSergeevichKovalenko/OUR_FINAL_PROJECT/tree/main
 cd OUR_FINAL_PROJECT
 python main.py
 
