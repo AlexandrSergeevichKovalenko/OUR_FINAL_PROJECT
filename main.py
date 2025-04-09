@@ -2,6 +2,7 @@ from functions_block import *
 from classes_for_program import *
 from contextlib import contextmanager
 from functions_block import load_data, save_data
+from note_functions import *
 
 
 def parse_input(user_input):
@@ -52,6 +53,7 @@ def main():
     Loads previous state from file, and saves data on exit.
     """
     with record_manager() as book:
+        notebook = NoteBook()
         print("Welcome to the assistant bot!")
         print("Type 'help' to see available commands.")
         while True:
@@ -79,6 +81,21 @@ def main():
             
             elif command == "all":
                 print(show_all(book))
+
+            elif command == "add-note":
+                print(add_note(notebook))
+
+            elif command == "show-note":
+                print(show_note(notebook))
+
+            elif command == "show-all-notes":
+                print(show_all_notes(notebook))
+
+            elif command == "change-note":
+                print(change_note(notebook))
+
+            elif command == "remove-note":
+                print(remove_note(notebook))
             
             elif command == "add-birthday":
                 print(add_birthday(args, book))
