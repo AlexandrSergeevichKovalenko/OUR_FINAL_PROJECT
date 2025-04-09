@@ -8,8 +8,11 @@ def add_note(book):
     If a note with the same title exists, prompts to replace it.
     """
     while True:
-        title = input(f"{"✨"} Enter a title:")
-        if title:
+        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:")
+        if title == "back":
+            print("Back to main menu.")
+            break
+        elif title:
             note = input(f"{"📜"} Enter a note:")
             tags = input(f"{"🏷️"} Enter a tags or (n):")
             if tags != "n":
@@ -47,8 +50,11 @@ def change_note(book):
     If the note does not exist, returns a failure message.
     """
     while True:
-        title = input(f"{"✨"} Enter a title:")
-        if title:
+        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:")
+        if title == "back":
+            print("Back to main menu.")
+            break
+        elif title:
             record = book.find(title)
             if record:
                 note = input(f"{"📜"} Enter a new note:")
@@ -64,8 +70,11 @@ def show_note(book):
     If the note does not exist, returns a failure message.
     """
     while True:
-        title = input(f"{"✨"} Enter a title:")
-        if title:
+        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:")
+        if title == "back":
+            print("Back to main menu.")
+            break
+        elif title:
             record = book.find(title)
             return f"{"📜"} {record.note}" if record else "Note not found."
         print("Please enter a title.")
@@ -84,8 +93,11 @@ def remove_note(book):
     If the note does not exist, returns a failure message.
     """
     while True:
-        title = input(f"{"✨"} Enter a title:")
-        if title:
+        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:")
+        if title == "back":
+            print("Back to main menu.")
+            break
+        elif title:
             record = book.find(title)
             if record:
                 book.delete(title)
