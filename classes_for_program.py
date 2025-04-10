@@ -60,7 +60,6 @@ class Email(Field):
 
     Example of valid email: user_123@example.com
     """
-
     def __init__(self, value):
         if not self.validate(value):
             raise ValueError("Invalid email format. Please use a valid email address like user_123@example.com")
@@ -72,6 +71,23 @@ class Email(Field):
         pattern = r'^(?=[a-z0-9_]*[a-z])[a-z0-9_]+@[a-z]+\.[a-z]+$'
         return re.fullmatch(pattern, email) is not None
 
+class Address(Field):
+    """
+    Represents an address field.
+    The address can contain only letters, digits, commas, periods, and spaces.
+    Example of valid address: "Example St, 123, Apt. 4B"
+    """
+    def __init__(self, value):
+        if not self.validate(value):
+            raise ValueError("Invalid address format. Use only letters, digits, commas, periods, and spaces.")
+        super().__init__(value)
+
+    @staticmethod
+    def validate(address: str) -> bool:
+        # This regex allows uppercase and lowercase letters, digits, commas, periods, and spaces.
+        pattern = r'^[A-Za-z0-9,\. ]+$'
+        return re.fullmatch(pattern, address) is not None
+
 # =========================== RECORD AND ADDRESSBOOK ===========================
 
 class Record:
@@ -81,12 +97,14 @@ class Record:
     - optional birthday (Birthday)
     - multiple phones (Phone)
     - optional email (Email)
+    - optional address (Address)
     """
     def __init__(self, name):
         self.name = Name(name)
         self.phones = []
         self.birthday = None
         self.email = None
+        self.address = None
 
     def add_birthday(self, data: str):
         """Set or update the contact's birthday."""
@@ -97,7 +115,7 @@ class Record:
         """Add a new phone number to the contact."""
         phone = Phone(phone_number)
         self.phones.append(phone)
-    
+
     # !!!
     # I don't see any use of this method
     # !!!
@@ -110,7 +128,7 @@ class Record:
         """Replace old phone with a new phone number."""
         if not Phone.validate(new_number):
             raise ValueError("The new phone number is not valid. Please enter a valid 10-digit number.")
-       
+
         for phone in self.phones:
             if phone.value == old_number:
                 phone.value = new_number
@@ -126,28 +144,36 @@ class Record:
         raise ValueError("The number was not found")
 
     def add_email(self, email_address: str):
-        """
-        Adds or updates the contact's email.
-        """
+        """Adds or updates the contact's email."""
         self.email = Email(email_address)
 
     def edit_email(self, new_email: str):
-        """
-        Replaces the existing email with a new email address.
-        """
+        """Replaces the existing email with a new email address."""
         self.email = Email(new_email)
 
     def remove_email(self):
-        """
-        Removes the contact's email.
-        """
+        """Removes the contact's email."""
         self.email = None
+
+    def add_address(self, address: str):
+        """Adds or updates the contact's address."""
+        self.address = Address(address)
+
+    def edit_address(self, new_address: str):
+        """Replaces the existing address with a new address."""
+        self.address = Address(new_address)
+
+    def remove_address(self):
+        """Removes the contact's address."""
+        self.address = None
 
     def __str__(self):
         birthday_str = self.birthday.value.strftime("%d.%m.%Y") if self.birthday else "N/A"
         phones_string = '; '.join(p.value for p in self.phones)
         email_str = self.email.value if self.email else "N/A"
-        return f"Contact name: {self.name.value}, phones: {phones_string}, birthday: {birthday_str}, email: {email_str}"
+        address_str = self.address.value if self.address else "N/A"
+        return (f"Contact name: {self.name.value}, phones: {phones_string}, "
+                f"birthday: {birthday_str}, email: {email_str}, address: {address_str}")
 
 
 class AddressBook(UserDict):
@@ -157,7 +183,7 @@ class AddressBook(UserDict):
     - add, find, delete contacts
     - upcoming birthday detection
     """
- 
+
     def add_record(self, note: Record):
         """Add a Record instance to the address book."""
         self.data[note.name.value] = note
@@ -172,7 +198,7 @@ class AddressBook(UserDict):
         """Delete a contact by name, if it exists."""
         if name in self.data:
             del self.data[name]
-    
+
     #def string_to_date(date_string):
         #return datetime.strptime(date_string, "%Y.%m.%d").date()
 
@@ -202,12 +228,12 @@ class AddressBook(UserDict):
         today = date.today()
 
         for user, dict_record in self.data.items():
-            #the first is to check if the dict_record object:Record has something in attribute birthday(it can happen, 
+            #the first is to check if the dict_record object:Record has something in attribute birthday(it can happen,
             # that there is a name and a phone, but there is no birthday date entered by user)
             if dict_record.birthday:
                 birthday_this_year = dict_record.birthday.value.replace(year=today.year).date()
                 if birthday_this_year < today:
-                    birthday_this_year = dict_record.birthday.value.replace(year=today.year + 1).date() 
+                    birthday_this_year = dict_record.birthday.value.replace(year=today.year + 1).date()
 
                 if 0 <= (birthday_this_year - today).days <= int(days):
                     congratulation_date = AddressBook.adjust_for_weekend(birthday_this_year)
