@@ -21,9 +21,9 @@ def print_help():
     commands = {
         "add [name] [phone]": "Add a new contact or phone to existing contact",
         "change [name] [old] [new]": "Change a phone number",
-        "phone [name]": "Show phone numbers for a contact",
+        "search [pattern]": "Show records according search pattern",
         "all": "Show all contacts",
-        "add-birthday [name] [DD.MM.YYYY]": "Add birthday to a contact",
+        "set-birthday [name] [DD.MM.YYYY]": "Set birthday to a contact",
         "show-birthday [name]": "Show birthday for a contact",
         "birthdays [days]": "Show upcoming birthdays in the next [N] days",
         "birthdays": "Show upcoming birthdays in the next 7 days",
@@ -63,8 +63,6 @@ def main():
     Loads previous state from file, and saves data on exit.
     """
     with record_manager(FILENAME) as book, record_manager(NOTEFILENAME) as notebook:
-        print(type(book))
-        print(type(notebook))
         print("Welcome to the assistant bot!")
         print("Type 'help' to see available commands.")
         while True:
@@ -87,15 +85,15 @@ def main():
             elif command == "change":
                 print(change_contact(data.split(), book))
 
-            elif command == "phone":
-                print(show_phone(data.split(), book))
+            elif command == "search":
+                show_search_result(search_records(data.split(), book))
 
             elif command == "all":
                 print(show_all(book))
 
-            elif command == "add-birthday":
-                print(add_birthday(data.split(), book))
-
+            elif command == "set-birthday":
+                print(set_birthday(data.split(), book))
+            
             elif command == "show-birthday":
                 print(show_birthday(data.split(), book))
 
