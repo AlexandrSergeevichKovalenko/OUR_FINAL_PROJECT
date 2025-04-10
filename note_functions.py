@@ -106,23 +106,36 @@ def remove_note(book):
             return f"{Fore.YELLOW}Note not found.{Fore.RESET}"
         print("Please enter a title.")
 
-def sorted_notes_by_tags(book):
+def search_note(command):
     """
-    Sort notes by tags.
+    Sort notes by tags or search for a specific word in the notes by title, note, tags.
     If the notebook is empty, returns a message indicating so.
     If the notebook is not empty, sort the notes by tags and returns them.
     """
-    if book:
-        sorted_note = book.sorted_notes_by_tags()
-        panels = [
-            Panel(
-                Text(str(note), style="bold dark_blue", no_wrap=True),
-                border_style="dark_green",
-                expand=False)  for note in sorted_note]
-        print("--" * 50)
-        for panel in panels:
-            console.print(panel)
-            print()
-        print("--" * 50)
-    else:
-        print(f"{Fore.YELLOW}NoteBook is empty{Fore.RESET}")
+    def inner(book):
+        if book:
+            if command == "search":
+                word = input(f"🔍 Enter a word to search for:").lower()
+
+            STR = {
+                "sorted": lambda : book.sorted_notes_by_tags()
+                ,"search": lambda : book.search_notes(word)
+            }   
+
+            sorted_note = STR[command]()
+            if sorted_note:
+                panels = [
+                    Panel(
+                        Text(str(note), style="bold dark_blue", no_wrap=True),
+                        border_style="dark_green",
+                        expand=False)  for note in sorted_note]
+                print("--" * 50)
+                for panel in panels:
+                    console.print(panel)
+                    print()
+                print("--" * 50)
+            else:
+                print(f"{Fore.YELLOW}No notes found with that title, tag or note.{Fore.RESET}")
+        else:
+            print(f"{Fore.YELLOW}NoteBook is empty{Fore.RESET}")
+    return inner
