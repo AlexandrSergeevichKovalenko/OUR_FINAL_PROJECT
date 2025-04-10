@@ -20,7 +20,9 @@ def print_help():
     """
     commands = {
         "add [name] [phone]": "Add a new contact or phone to existing contact",
-        "change [name] [old] [new]": "Change a phone number",
+        "change-name [old name] [new name]": "Change the contact name",
+        "del [name]": "Delete the contact",
+        "change-phone [name] [old] [new]": "Change a phone number",
         "search [pattern]": "Show records according search pattern",
         "all": "Show all contacts",
         "set-birthday [name] [DD.MM.YYYY]": "Set birthday to a contact",
@@ -83,17 +85,23 @@ def main():
             elif command == "add":
                 print(add_contact(data.split(), book))
 
-            elif command == "change":
+            elif command == "del":
+                print(del_contact(data.split(), book))
+
+            elif command == "change-name":
                 print(change_contact(data.split(), book))
 
+            elif command == "change-phone":
+                print(change_phone(data.split(), book))
+
             elif command == "search":
-                show_search_result(search_records(args, book))
+                show_search_result(search_records(data.split(), book))
 
             elif command == "all":
                 print(show_all(book))
 
             elif command == "set-birthday":
-                print(set_birthday(args, book))
+                print(set_birthday(data.split(), book))
             
             elif command == "show-birthday":
                 print(show_birthday(data.split(), book))
