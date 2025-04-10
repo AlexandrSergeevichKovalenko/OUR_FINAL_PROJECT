@@ -73,7 +73,7 @@ class Email(Field):
         return re.fullmatch(pattern, email) is not None
 
 # =========================== RECORD AND ADDRESSBOOK ===========================
-
+ 
 class Record:
     """
     Stores contact information:

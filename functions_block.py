@@ -28,23 +28,35 @@ def change_contact(args, book: AddressBook):
     else:
         return f"There is no person with {name} name"
 
-@input_error(expected_arg_count=1)
-def show_phone(args, book: AddressBook):
-    name = args[0]
-    record = book.find(name)
-    phone_result = f"{name}'s phone is "
-    if record:
-        for r in record.phones:
-            phone_result += f"{r.value} "
-        return phone_result
-    else:
-        return f"The name {name} you have asked for does not exist."
-    
 def show_all(book: AddressBook):
     if len(book.data) != 0:
         return str(book)
     else:
         return "There is no data to output."
+
+@input_error(expected_arg_count=1)
+def search_records(args, book: AddressBook):
+    records = []
+    search_string = str(args[0])
+    for k, v in book.data.items():
+        target_string = v.name.value \
+            + v.birthday.value.strftime("%d.%m.%Y") if v.birthday else "│" \
+            + '│'.join(vp.value for k, vp in v.phones) \
+            + v.email.value if v.email else ""
+        if search_string in target_string:
+            records.append(v)
+#    for k, v in book.data.items():
+#        for p in v.phones:
+#            if search_string in p.value:
+#                records.append(v)            
+    return records       
+    
+
+def show_search_result(result: list):
+    if result: 
+        for i in result:
+            print(f'{i}')
+
 
 @input_error(expected_arg_count=2)
 def add_birthday(args, book):

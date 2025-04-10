@@ -19,7 +19,7 @@ def print_help():
     commands = {
         "add [name] [phone]": "Add a new contact or phone to existing contact",
         "change [name] [old] [new]": "Change a phone number",
-        "phone [name]": "Show phone numbers for a contact",
+        "search [pattern]": "Show records according search pattern",
         "all": "Show all contacts",
         "add-birthday [name] [DD.MM.YYYY]": "Add birthday to a contact",
         "show-birthday [name]": "Show birthday for a contact",
@@ -79,8 +79,8 @@ def main():
             elif command == "change":
                 print(change_contact(args, book))
 
-            elif command == "phone":
-                print(show_phone(args, book))
+            elif command == "search":
+                show_search_result(search_records(args, book))
 
             elif command == "all":
                 print(show_all(book))
