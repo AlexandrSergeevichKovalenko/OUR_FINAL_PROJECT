@@ -141,6 +141,66 @@ def remove_email(args, book: AddressBook):
     record.remove_email()
     return "Email removed."
 
+@input_error(expected_arg_count=2)
+def add_address(args, book: AddressBook):
+    """
+    Adds or updates the address for a contact.
+    Usage: add-address [name] [address]
+    """
+    # The first element is the contact's name
+    # All remaining elements are combined into one address string
+    name = args[0]
+    address = " ".join(args[1:])  # Join all remaining arguments with a space
+
+    record = book.find(name)
+    if record is None:
+        record = Record(name)
+        book.add_record(record)
+    record.add_address(address)
+    return "Address added/updated."
+
+@input_error(expected_arg_count=2)
+def change_address(args, book: AddressBook):
+    """
+    Changes the address for an existing contact.
+    Usage: change-address [name] [new_address]
+    """
+    # The first element is the contact's name
+    # All remaining elements are combined into one new address string
+    name = args[0]
+    new_address = " ".join(args[1:])
+
+    record = book.find(name)
+    if record is None or not record.address:
+        return f"No existing address found for contact '{name}'. Use 'add-address' to add an address."
+    record.edit_address(new_address)
+    return "Address updated."
+
+@input_error(expected_arg_count=1)
+def show_address(args, book: AddressBook):
+    """
+    Shows the address for a contact.
+    Usage: show-address [name]
+    """
+    name, *_ = args
+    record = book.find(name)
+    if record is None or not record.address:
+        return f"No address found for contact '{name}'."
+    return f"{name}'s address: {record.address.value}"
+
+@input_error(expected_arg_count=1)
+def remove_address(args, book: AddressBook):
+    """
+    Removes the address for a contact.
+    Usage: remove-address [name]
+    """
+    name, *_ = args
+    record = book.find(name)
+    if record is None or not record.address:
+        return f"No address to remove for contact '{name}'."
+    record.remove_address()
+    return "Address removed."
+
 # forming a string of names of the persons, who should be congratulated and their respective birthday dates.
 def birthdays(book, args):
     str = ""    

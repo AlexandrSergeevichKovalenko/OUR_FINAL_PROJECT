@@ -10,7 +10,8 @@ def input_error(expected_arg_count=None):
         "NoNameError": "You did not provide name whose phone you want to see",
         "InvalidName": "Invalid format for name. Please use alphabetic characters only.",
         "InvalidPhone": "Invalid format for phone. Please use numeric characters only.",
-        "InvalidEmail": "Invalid email format. Please use a valid email address like user_123@example.com."
+        "InvalidEmail": "Invalid email format. Please use a valid email address like user_123@example.com.",
+        "InvalidAddress": "Invalid address format. Please use only letters, digits, commas, periods, and spaces."
     }
 
     def decorator(func):
@@ -34,6 +35,12 @@ def input_error(expected_arg_count=None):
                 if func.__name__ in ["add_email", "change_email"]:
                     if "@" not in args[0][1] or "." not in args[0][1]:
                         raise ValueError(error_messages["InvalidEmail"])
+                # Checking address for add_address and change_address functions
+                if func.__name__ in ["add_address", "change_address"]:
+                    # Validate the address using Address.validate method
+                    from classes_for_program import Address
+                    if not Address.validate(args[0][1]):
+                        raise ValueError(error_messages["InvalidAddress"])
 
                 return func(*args, **kwargs)
 
