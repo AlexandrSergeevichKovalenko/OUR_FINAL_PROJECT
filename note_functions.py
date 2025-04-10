@@ -13,12 +13,12 @@ def add_note(book):
     If a note with the same title exists, prompts to replace it.
     """
     while True:
-        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:").lower()
+        title = input(f"✨ Enter a title or (back) to return to the main menu:").lower()
         if title == "back":
-            return "Back to main menu."
+            return f"{Fore.YELLOW}Back to main menu.{Fore.YELLOW}"
         elif title:
-            note = input(f"{"📜"} Enter a note:")
-            tags = input(f"{"🏷️"} Enter a tags or (n):")
+            note = input(f"📜 Enter a note:")
+            tags = input(f"🏷️ Enter a tags or (n):")
             if tags != "n":
                 tags = tags.split(",")
                 tags = [tag.strip() for tag in tags]
@@ -32,19 +32,19 @@ def add_note(book):
                 if tags:
                     record.add_tags(tags)
                 book.add_record(record)
-                return "Note added."
+                return f"{Fore.GREEN}Note added.{Fore.RESET}"
             else:
                 while True:
-                    print("A note with this name already exists, do you want to replace it? (y/n)")
-                    answer = input()
+                    print(f"{Fore.YELLOW}A note with this name already exists, do you want to replace it? (y/n){Fore.RESET}")
+                    answer = input().lover()
                     if answer == "y":
                         record.add_note(note)
                         if tags:
-                            record.add_tags(note)
-                        return "Note changed."
+                            record.add_tags(tags)
+                        return f"{Fore.GREEN}Note changed.{Fore.RESET}"
                     elif answer == "n":
-                        return "Note not changed."
-        print("Title cannot be empty. Please try again.")
+                        return f"{Fore.YELLOW}Note not changed.{Fore.RESET}"
+        print(f"{Fore.YELLOW}Title cannot be empty. Please try again.{Fore.RESET}")
 
 def change_note(book):
     """
@@ -54,17 +54,17 @@ def change_note(book):
     If the note does not exist, returns a failure message.
     """
     while True:
-        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:").lower()
+        title = input(f"✨ Enter a title or (back) to return to the main menu:").lower()
         if title == "back":
-            return "Back to main menu."
+            return f"{Fore.YELLOW}Back to main menu.{Fore.RESET}"
         elif title:
             record = book.find(title)
             if record:
-                note = input(f"{"📜"} Enter a new note:")
+                note = input(f"📜 Enter a new note:")
                 record.add_note(note)
-                return "Note changed."
-            return "Note not found."
-        print("Please enter a title.")
+                return f"{Fore.GREEN}Note changed.{Fore.RESET}"
+            return f"{Fore.YELLOW}Note not found.{Fore.RESET}"
+        print(f"{Fore.YELLOW}Please enter a title.{Fore.RESET}")
 
 def show_note(book):
     """
@@ -73,20 +73,20 @@ def show_note(book):
     If the note does not exist, returns a failure message.
     """
     while True:
-        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:").lower()
+        title = input(f"✨ Enter a title or (back) to return to the main menu:").lower()
         if title == "back":
-            return "Back to main menu."
+            return f"{Fore.YELLOW}Back to main menu.{Fore.RESET}"
         elif title:
             record = book.find(title)
-            return f"{"📜"} {record.note}" if record else "Note not found."
-        print("Please enter a title.")
+            return f"📜 {record.note}" if record else f"{Fore.YELLOW}Note not found.{Fore.RESET}"
+        print(f"{Fore.YELLOW}Please enter a title.{Fore.RESET}")
 
 def show_all_notes(book):
     """
     Display all notes in the notebook.
     If the notebook is empty, returns a message indicating so.
     """
-    return book if book else "NoteBook is empty"
+    return book if book else f"{Fore.YELLOW}NoteBook is empty.{Fore.RESET}"
 
 def remove_note(book):
     """
@@ -95,15 +95,15 @@ def remove_note(book):
     If the note does not exist, returns a failure message.
     """
     while True:
-        title = input(f"{"✨"} Enter a title or (back) to return to the main menu:").lower()
+        title = input(f"✨ Enter a title or (back) to return to the main menu:").lower()
         if title == "back":
-            return "Back to main menu."
+            return f"{Fore.YELLOW}Back to main menu.{Fore.RESET}"
         elif title:
             record = book.find(title)
             if record:
                 book.delete(title)
-                return "Note removed."
-            return "Note not found."
+                return f"{Fore.GREEN}Note removed.{Fore.RESET}"
+            return f"{Fore.YELLOW}Note not found.{Fore.RESET}"
         print("Please enter a title.")
 
 def sorted_notes_by_tags(book):
@@ -117,14 +117,12 @@ def sorted_notes_by_tags(book):
         panels = [
             Panel(
                 Text(str(note), style="bold dark_blue", no_wrap=True),
-                style="on light_green",
                 border_style="dark_green",
                 expand=False)  for note in sorted_note]
-        print("--" * 40)
-        console.print(Text("Notes sorted by tags", style="bold dark_blue"))
+        print("--" * 50)
         for panel in panels:
             console.print(panel)
             print()
-        print("--" * 40)
+        print("--" * 50)
     else:
-        print(f"{Fore.RED}NoteBook is empty{Fore.RESET}")
+        print(f"{Fore.YELLOW}NoteBook is empty{Fore.RESET}")

@@ -46,15 +46,15 @@ def print_help():
 
 
 @contextmanager
-def record_manager():
+def record_manager(file):
     """
     use context manager to operate safely 
     """
-    book = load_data()
+    book = load_data(file)
     try:
         yield book
     finally:
-        save_data(book)
+        save_data(book, file)
 
 
 def main():
@@ -62,8 +62,9 @@ def main():
     Command-line assistant for managing contacts.
     Loads previous state from file, and saves data on exit.
     """
-    with record_manager() as book:
-        notebook = NoteBook()
+    with record_manager(FILENAME) as book, record_manager(NOTEFILENAME) as notebook:
+        print(type(book))
+        print(type(notebook))
         print("Welcome to the assistant bot!")
         print("Type 'help' to see available commands.")
         while True:
