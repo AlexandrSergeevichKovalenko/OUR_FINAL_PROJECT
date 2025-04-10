@@ -7,11 +7,12 @@ from note_functions import *
 
 def parse_input(user_input):
     """
-    parsing a console line 
+    Parses a console line into a command and a data string.
     """
-    cmd, *args = user_input.split()
-    cmd = cmd.strip().lower()
-    return cmd, *args
+    parts = user_input.split(" ", 1)  # Split into at most 2 parts
+    cmd = parts[0].strip().lower()
+    data = parts[1] if len(parts) > 1 else ""
+    return cmd, data
 
 def print_help():
     """
@@ -67,8 +68,8 @@ def main():
         print("Type 'help' to see available commands.")
         while True:
             user_input = input("Enter a command: ")
-            command, *args = parse_input(user_input)
-            
+            command, data = parse_input(user_input)
+
             if command in ["close", "exit"]:
                 print("Good bye!")
                 break
@@ -80,38 +81,38 @@ def main():
                 print_help()
 
             elif command == "add":
-                print(add_contact(args, book))
+                print(add_contact(data.split(), book))
 
             elif command == "change":
-                print(change_contact(args, book))
+                print(change_contact(data.split(), book))
 
             elif command == "phone":
-                print(show_phone(args, book))
+                print(show_phone(data.split(), book))
 
             elif command == "all":
                 print(show_all(book))
 
             elif command == "add-birthday":
-                print(add_birthday(args, book))
+                print(add_birthday(data.split(), book))
 
             elif command == "show-birthday":
-                print(show_birthday(args, book))
+                print(show_birthday(data.split(), book))
 
             elif command == "birthdays":
-                print(birthdays(book, args))
+                print(birthdays(book, data.split()))
 
             elif command == "add-email":
-                print(add_email(args, book))
+                print(add_email(data.split(), book))
 
             elif command == "change-email":
-                print(change_email(args, book))
+                print(change_email(data.split(), book))
 
             elif command == "show-email":
-                print(show_email(args, book))
+                print(show_email(data.split(), book))
 
             elif command == "remove-email":
-                print(remove_email(args, book))
-            
+                print(remove_email(data.split(), book))
+
             elif command == "add-note":
                 print(add_note(notebook))
 
@@ -130,17 +131,27 @@ def main():
             elif command == "remove-note":
                 print(remove_note(notebook))
 
-            elif command == "add-address":
-                print(add_address(args, book))
-
-            elif command == "change-address":
-                print(change_address(args, book))
-
             elif command == "show-address":
-                print(show_address(args, book))
+                print(show_address(data.split(), book))
 
             elif command == "remove-address":
-                print(remove_address(args, book))
+                print(remove_address(data.split(), book))
+
+            elif command == "add-address":
+                # 'data' now contains a single string, e.g.: "John Example St. 123, apt. 4B"
+                # Split it into two parts: the first word (name) and the rest (address)
+                parts = data.split(" ", 1)
+                if len(parts) < 2:
+                    print("Not enough arguments for add-address command.")
+                else:
+                    print(add_address(parts, book))
+
+            elif command == "change-address":
+                parts = data.split(" ", 1)
+                if len(parts) < 2:
+                    print("Not enough arguments for change-address command.")
+                else:
+                    print(change_address(parts, book))
 
             else:
                 print("Invalid command.")
