@@ -21,7 +21,7 @@ def print_help():
         "change [name] [old] [new]": "Change a phone number",
         "search [pattern]": "Show records according search pattern",
         "all": "Show all contacts",
-        "add-birthday [name] [DD.MM.YYYY]": "Add birthday to a contact",
+        "set-birthday [name] [DD.MM.YYYY]": "Set birthday to a contact",
         "show-birthday [name]": "Show birthday for a contact",
         "birthdays [days]": "Show upcoming birthdays in the next [N] days",
         "birthdays": "Show upcoming birthdays in the next 7 days",
@@ -85,9 +85,9 @@ def main():
             elif command == "all":
                 print(show_all(book))
 
-            elif command == "add-birthday":
-                print(add_birthday(args, book))
-
+            elif command == "set-birthday":
+                print(set_birthday(args, book))
+            
             elif command == "show-birthday":
                 print(show_birthday(args, book))
 

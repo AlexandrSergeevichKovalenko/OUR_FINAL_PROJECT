@@ -36,6 +36,10 @@ def show_all(book: AddressBook):
 
 @input_error(expected_arg_count=1)
 def search_records(args, book: AddressBook):
+    """
+    Search string in all attributes of contact in addressbook.
+    Usage: search [search_string] 
+    """
     records = []
     search_string = str(args[0])
     for k, v in book.data.items():
@@ -54,9 +58,9 @@ def show_search_result(result: list):
             print(f'{i}')
 
 @input_error(expected_arg_count=2)
-def add_birthday(args, book):
+def set_birthday(args, book):
     name, birthday_day, *_ = args
-    message = "Birthday added."
+    message = "Birthday is set."
     record = book.find(name)
 
     if record is None:
@@ -64,7 +68,7 @@ def add_birthday(args, book):
     
     # to be sure that a user will not enter date, which is not exist, like 31.02.2020 (there is a check in __init__, but only for the correct format of an inputted data).
     try:
-        record.add_birthday(birthday_day)
+        record.set_birthday(birthday_day)
         return message
     except ValueError as e:
         return str(e)
@@ -80,7 +84,7 @@ def show_birthday(args, book):
             return f"{name}'s birthday is on {record.birthday.value.strftime('%d.%m.%Y')}"
         else:
             return f"{name} does not have a birthday set."
-
+        
 @input_error(expected_arg_count=2)
 def add_email(args, book: AddressBook):
     """
