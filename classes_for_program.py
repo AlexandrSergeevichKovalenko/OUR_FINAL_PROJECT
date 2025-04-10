@@ -89,7 +89,7 @@ class Address(Field):
         return re.fullmatch(pattern, address) is not None
 
 # =========================== RECORD AND ADDRESSBOOK ===========================
-
+ 
 class Record:
     """
     Stores contact information:
@@ -106,7 +106,7 @@ class Record:
         self.email = None
         self.address = None
 
-    def add_birthday(self, data: str):
+    def set_birthday(self, data: str):
         """Set or update the contact's birthday."""
         self.birthday = Birthday(data)
 
@@ -245,7 +245,8 @@ class AddressBook(UserDict):
     def __str__(self):
         output = ["AddressBook: "]
         for key in self.data:
-            contact_description_line = (f"name: {self.data[key].name.value}, phones: {'; '.join(phone.value for phone in self.data[key].phones)}")
+            contact_description_line = (f"name: {self.data[key]}")
+                   
             output.append(contact_description_line)
         total_info_line = "\n".join(output)
         return total_info_line
