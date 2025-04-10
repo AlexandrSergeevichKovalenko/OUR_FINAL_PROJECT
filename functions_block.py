@@ -39,24 +39,19 @@ def search_records(args, book: AddressBook):
     records = []
     search_string = str(args[0])
     for k, v in book.data.items():
-        target_string = v.name.value \
-            + v.birthday.value.strftime("%d.%m.%Y") if v.birthday else "│" \
-            + '│'.join(vp.value for k, vp in v.phones) \
-            + v.email.value if v.email else ""
+        strN = v.name.value
+        strB = v.birthday.value.strftime("%d.%m.%Y") if v.birthday else "│"
+        strPhones = '│'.join(vp.value for vp in v.phones)
+        strEmail = v.email.value if v.email else ""
+        target_string = strN + strB + strPhones + strEmail
         if search_string in target_string:
-            records.append(v)
-#    for k, v in book.data.items():
-#        for p in v.phones:
-#            if search_string in p.value:
-#                records.append(v)            
+            records.append(v)          
     return records       
     
-
 def show_search_result(result: list):
     if result: 
         for i in result:
             print(f'{i}')
-
 
 @input_error(expected_arg_count=2)
 def add_birthday(args, book):
