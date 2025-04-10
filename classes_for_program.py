@@ -219,8 +219,7 @@ class AddressBook(UserDict):
     def __str__(self):
         output = ["AddressBook: "]
         for key in self.data:
-            contact_description_line = (f"name: {self.data[key]}")
-                   
+            contact_description_line = (f"name: {self.data[key]}")                   
             output.append(contact_description_line)
         total_info_line = "\n".join(output)
         return total_info_line

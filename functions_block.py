@@ -56,6 +56,8 @@ def show_search_result(result: list):
     if result: 
         for i in result:
             print(f'{i}')
+    else:
+        print('Not found!')
 
 @input_error(expected_arg_count=2)
 def set_birthday(args, book):
