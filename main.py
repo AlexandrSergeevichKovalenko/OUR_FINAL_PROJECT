@@ -30,6 +30,10 @@ def print_help():
         "change-email [name] [new_email]": "Change email for a contact",
         "show-email [name]": "Show email for a contact",
         "remove-email [name]": "Remove email from a contact",
+        "add-address [name] [address]": "Add or update address for a contact",
+        "change-address [name] [new_address]": "Change address for a contact",
+        "show-address [name]": "Show address for a contact",
+        "remove-address [name]": "Remove address from a contact",
         "hello": "Get a greeting from the bot",
         "close / exit": "Exit the program"
     }
@@ -125,6 +129,18 @@ def main():
 
             elif command == "remove-note":
                 print(remove_note(notebook))
+
+            elif command == "add-address":
+                print(add_address(args, book))
+
+            elif command == "change-address":
+                print(change_address(args, book))
+
+            elif command == "show-address":
+                print(show_address(args, book))
+
+            elif command == "remove-address":
+                print(remove_address(args, book))
 
             else:
                 print("Invalid command.")
