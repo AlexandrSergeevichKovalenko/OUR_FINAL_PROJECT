@@ -125,8 +125,8 @@ def main():
                 print(change_note(notebook))
 
             elif command in ["sorted-notes-by-tags", "search-notes"]:
-                sorted_notes_by_tags = search_note(command)
-                sorted_notes_by_tags(notebook)
+                search_notes = search_note(command)
+                search_notes(notebook)
 
             elif command == "remove-note":
                 print(remove_note(notebook))
