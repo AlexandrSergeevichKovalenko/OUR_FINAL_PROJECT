@@ -114,12 +114,12 @@ def search_note(command):
     """
     def inner(book):
         if book:
-            if command == "search":
-                word = input(f"🔍 Enter a word to search for:").lower()
+            if command == "search-notes":
+                word = input(f"🔍 Enter a words to search for:").lower()
 
             STR = {
-                "sorted": lambda : book.sorted_notes_by_tags()
-                ,"search": lambda : book.search_notes(word)
+                "sorted-notes-by-tags": lambda : book.sorted_notes_by_tags()
+                ,"search-notes": lambda : book.search_notes(word)
             }   
 
             sorted_note = STR[command]()
