@@ -4,8 +4,8 @@ from rich.panel import Panel
 
 from classes_for_program import Note
 from functions_block import (
-    add_contact, change_contact, show_all, add_birthday,
-    birthdays, add_email, change_email, add_address, change_address
+    add_contact, change_contact, remove_contact, show_all, add_birthday,
+    birthdays, add_email, change_email, add_address, change_address, save_data
 )
 from note_functions import (
     change_note, show_note, show_all_notes, remove_note
@@ -20,6 +20,9 @@ class InteractiveMenu:
     Provides nested menus with numeric selection and Rich formatting.
     Users can cancel any action by entering 'cancel'.
     """
+
+    def __init__(self):
+        self.save_data = save_data
 
     def display_main_menu(self):
         menu_text = (
@@ -175,22 +178,22 @@ class InteractiveMenu:
                 phone = self.prompt_input("Enter phone number (10 digits) (or 'cancel'): ")
                 if phone:
                     console.print(add_contact([name, phone], book))
-                    save_data(book)
+                    self.save_data(book)
             elif sub_choice == '2':
                 email = self.prompt_input("Enter email (or 'cancel'): ")
                 if email:
                     console.print(add_email([name, email], book))
-                    save_data(book)
+                    self.save_data(book)
             elif sub_choice == '3':
                 address = self.prompt_input("Enter address (or 'cancel'): ")
                 if address:
                     console.print(add_address([name, address], book))
-                    save_data(book)
+                    self.save_data(book)
             elif sub_choice == '4':
                 birthday = self.prompt_input("Enter birthday (DD.MM.YYYY) (or 'cancel'): ")
                 if birthday:
                     console.print(add_birthday([name, birthday], book))
-                    save_data(book)
+                    self.save_data(book)
             else:
                 console.print("[bold red]Invalid option, please try again.[/bold red]")
             prompt("Press Enter to continue...")
@@ -210,22 +213,22 @@ class InteractiveMenu:
                 new_phone = self.prompt_input("Enter new phone number (or 'cancel'): ")
                 if new_phone:
                     console.print(change_contact([name, "", new_phone], book))
-                    save_data(book)
+                    self.save_data(book)
             elif sub_choice == '2':
                 new_email = self.prompt_input("Enter new email (or 'cancel'): ")
                 if new_email:
                     console.print(change_email([name, new_email], book))
-                    save_data(book)
+                    self.save_data(book)
             elif sub_choice == '3':
                 new_address = self.prompt_input("Enter new address (or 'cancel'): ")
                 if new_address:
                     console.print(change_address([name, new_address], book))
-                    save_data(book)
+                    self.save_data(book)
             elif sub_choice == '4':
                 new_birthday = self.prompt_input("Enter new birthday (DD.MM.YYYY) (or 'cancel'): ")
                 if new_birthday:
                     console.print(add_birthday([name, new_birthday], book))
-                    save_data(book)
+                    self.save_data(book)
             elif sub_choice in ['5', '6', '7', '8']:
                 console.print("Remove functionality (not implemented yet)")
             else:
@@ -252,7 +255,8 @@ class InteractiveMenu:
             return
         answer = self.prompt_input("Are you sure you want to delete this contact? (y/n): ")
         if answer and answer.lower() == "y":
-            console.print("Remove Contact functionality (not implemented yet)")
+            console.print(remove_contact([name], book))
+            self.save_data(book)
         else:
             console.print("Deletion cancelled.")
         prompt("Press Enter to continue...")
@@ -376,8 +380,7 @@ class InteractiveMenu:
             elif choice == '6':
                 console.clear()
                 title = self.prompt_input("Enter note title to remove (or 'cancel'): ")
-                if title:
-                    console.print(remove_note(notebook))
+                console.print(remove_note(notebook, title))
                 prompt("Press Enter to continue...")
             else:
                 console.print("[bold red]Invalid option in Notes Menu.[/bold red]")

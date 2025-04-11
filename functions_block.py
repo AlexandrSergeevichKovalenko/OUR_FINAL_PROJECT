@@ -29,6 +29,19 @@ def change_contact(args, book: AddressBook):
         return f"There is no person with {name} name"
 
 @input_error(expected_arg_count=1)
+def remove_contact(args, book: AddressBook):
+    """
+    Removes a contact from the address book.
+    Usage: remove-contact [name]
+    """
+    name, *_ = args
+    record = book.find(name)
+    if record is None:
+        return f"No contact found with name '{name}'."
+    book.delete(name)
+    return f"Contact '{name}' removed."
+
+@input_error(expected_arg_count=1)
 def show_phone(args, book: AddressBook):
     name = args[0]
     record = book.find(name)

@@ -16,12 +16,12 @@ def add_note(book):
     If a note with the same title exists, prompts to replace it.
     """
     while True:
-        title = input("✨ Enter a title or (back) to return to the main menu: ").lower()
+        title = input("✨ Enter a title or (back) to return to the main menu: ").strip().lower()
         if title == "back":
             return "Back to main menu."
         elif title:
-            note = input("📜 Enter a note: ")
-            tags = input("🏷️ Enter tags or (n): ")
+            note = input("📜 Enter a note: ").strip().lower()
+            tags = input("🏷️ Enter tags or (n): ").strip().lower()
             if tags != "n":
                 tags = tags.split(",")
                 tags = [tag.strip() for tag in tags]
@@ -57,13 +57,13 @@ def change_note(book):
     If the note does not exist, returns a failure message.
     """
     while True:
-        title = input("✨ Enter a title or (back) to return to the main menu: ").lower()
+        title = input("✨ Enter a title or (back) to return to the main menu: ").strip().lower()
         if title == "back":
             return "Back to main menu."
         elif title:
             record = book.find(title)
             if record:
-                note = input("📜 Enter a new note: ")
+                note = input("📜 Enter a new note: ").strip().lower()
                 record.add_note(note)
                 return "Note changed."
             return "Note not found."
@@ -76,7 +76,7 @@ def show_note(book):
     If the note does not exist, returns a failure message.
     """
     while True:
-        title = input("✨ Enter a title or (back) to return to the main menu: ").lower()
+        title = input("✨ Enter a title or (back) to return to the main menu: ").strip().lower()
         if title == "back":
             return "Back to main menu."
         elif title:
@@ -91,23 +91,23 @@ def show_all_notes(book):
     """
     return str(book) if book else "NoteBook is empty"
 
-def remove_note(book):
+def remove_note(book, title=None):
     """
     Remove a note from the notebook.
-    If the note exists, deletes it and returns a success message.
-    If the note does not exist, returns a failure message.
+    If 'title' is provided, it is used directly; otherwise, the user is prompted.
     """
-    while True:
-        title = input("✨ Enter a title or (back) to return to the main menu: ").lower()
-        if title == "back":
-            return "Back to main menu."
-        elif title:
-            record = book.find(title)
-            if record:
-                book.delete(title)
-                return "Note removed."
-            return "Note not found."
-        print("Please enter a title.")
+    if title is None:
+        title = input("✨ Enter a title to remove (or type 'cancel' to return to the main menu): ").strip().lower()
+    if title == "cancel":
+        return "Back to main menu."
+    if not title:
+        return "Title cannot be empty."
+    record = book.find(title)
+    if record:
+        book.delete(title)
+        return "Note removed."
+    else:
+        return "Note not found."
 
 def sorted_notes_by_tags(book):
     """
@@ -122,7 +122,9 @@ def sorted_notes_by_tags(book):
                 Text(str(note), style="bold dark_blue", no_wrap=True),
                 style="on light_green",
                 border_style="dark_green",
-                expand=False) for note in sorted_note]
+                expand=False
+            ) for note in sorted_note
+        ]
         print("--" * 40)
         console.print(Text("Notes sorted by tags", style="bold dark_blue"))
         for panel in panels:
