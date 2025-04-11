@@ -116,14 +116,16 @@ def search_note(command):
     If the notebook is empty, returns a message indicating so.
     If the notebook is not empty, sorts the notes by tags and displays them.
     """
+    COMMANDS = {
+        "search-notes" : lambda: input(f"🔍 Enter words to search for:"),
+        "search-by_tags-and-sort-by-title" : lambda: input(f"🏷️ Enter tags to sort by:").lower()
+    }
     def inner(book):
         if book:
-            if command == "search-notes":
-                word = input(f"🔍 Enter a words to search for:").lower()
-
+            input_text = COMMANDS[command]()
             STR = {
-                "sorted-notes-by-tags": lambda : book.sorted_notes_by_tags()
-                ,"search-notes": lambda : book.search_notes(word)
+                "search-by-tags-and-sort-by-title": lambda : book.search_by_tags_and_sort_by_title(input_text)
+                ,"search-notes": lambda : book.search_notes(input_text)
             }   
 
             sorted_note = STR[command]()

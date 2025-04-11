@@ -124,7 +124,6 @@ class Record:
         """Remove an existing phone number from the contact."""
         self.phones = [phone for phone in self.phones if phone.value !=phone_number]
 
-
     def edit_phone(self, old_number: str, new_number: str):
         """Replace old phone with a new phone number."""
         if not Phone.validate(new_number):
@@ -135,7 +134,6 @@ class Record:
                 phone.value = new_number
                 return
         raise ValueError("The phone number you entered does not exist")
-
 
     def find_phone(self, num_phone:str):
         """Find a phone object in the contact by its value."""
@@ -241,7 +239,6 @@ class AddressBook(UserDict):
                     upcoming_birthdays.append({"name": user, "birthday": AddressBook.date_to_string(congratulation_date)})
         return upcoming_birthdays
 
-
     def __str__(self):
         """
         Returns a formatted string with all contacts' data,
@@ -316,12 +313,11 @@ class Note:
             return f"[bold cyan]Title:[/] {self.title}\n[bold yellow]Note:[/] {note_str}"
 
 
-
 class NoteBook(UserDict):
     """
     A container for storing and managing multiple notes.
     Supports:
-    - add, find, delete notes
+    - 'add', 'find', 'delete notes', 'search notes' and 'search by tags and sort by title'
     """
 
     def add_record(self, note: Note):
@@ -332,17 +328,19 @@ class NoteBook(UserDict):
         """Find a note by title. Returns the Note or None."""
         return self.data.get(title)
 
-    def sorted_notes_by_tags(self):
-        """Sort notes by tags."""
-        return sorted(self.data.values(), key=lambda x: x.tags)
+    def search_by_tags_and_sort_by_title(self, tags):
+        """Search by tags and sort by title."""
+        notes = [note for note in self.data.values() if any(tag.strip() in note.tags for tag in tags)]
+        if not notes:
+            return "[bold red]No notes found with that tag.[/bold red]"
+        return sorted(notes, key=lambda x: x.title)
     
     def search_notes(self, search_string: str):
-        """Search notes by a string in the title or note text or tags."""
-        pattern = fr"\b{re.escape(search_string)}\b"
+        """Search notes by a word in the title, note text or tags."""
         result = [
-            note for note in self.data.values() if re.search(pattern, note.title, re.IGNORECASE) 
-                                                or re.search(pattern, note.note, re.IGNORECASE)
-                                                or re.search(pattern, ','.join(note.tags), re.IGNORECASE)
+            note for note in self.data.values() if re.search(search_string, note.title, re.IGNORECASE) 
+                                                or re.search(search_string, note.note, re.IGNORECASE)
+                                                or re.search(search_string, ','.join(note.tags), re.IGNORECASE)
         ]
         return result
 
