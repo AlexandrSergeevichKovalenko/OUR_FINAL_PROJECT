@@ -27,7 +27,20 @@ def change_phone(args, book: AddressBook):
         return "Contact updated."
     else:
         return f"There is no person with {name} name"
-
+      
+@input_error(expected_arg_count=1)
+def remove_contact(args, book: AddressBook):
+    """
+    Removes a contact from the address book.
+    Usage: remove-contact [name]
+    """
+    name, *_ = args
+    record = book.find(name)
+    if record is None:
+        return f"No contact found with name '{name}'."
+    book.delete(name)
+    return f"Contact '{name}' removed."
+    
 # @input_error(expected_arg_count=2)
 def change_contact(args, book: AddressBook):
     """
@@ -46,21 +59,6 @@ def change_contact(args, book: AddressBook):
             return f"Contact name: {old_name} changed to {new_name}."
         else:
             return f"Contact with name: {new_name} not found"
-        
-@input_error(expected_arg_count=0)
-def del_contact(args, book: AddressBook):
-    """
-    Function for delete contact from Address book'.
-    del_contact(name: string) -> result message
-    """
-    name, *_ = args
-    record = book.find(name)
-    if record:
-        if input('Are you shure ? (y/n)').lower() == 'y': 
-            del book.data[name]
-            return f"Contact {name} deleted."
-    else:
-        return f"There is no person with {name} name"
 
 def show_all(book: AddressBook):
     if len(book.data) != 0:
@@ -95,15 +93,24 @@ def show_search_result(result: list):
         print('Not found!')
 
 @input_error(expected_arg_count=2)
+
 def set_birthday(args, book):
     name, birthday_day, *_ = args
     message = "Birthday is set."
     record = book.find(name)
 
     if record is None:
-        return f"There is no person with {name} name"
-    
-    # to be sure that a user will not enter date, which is not exist, like 31.02.2020 (there is a check in __init__, but only for the correct format of an inputted data).
+        # If the contact does not exist, prompt to create it
+        print(f"There is no contact with the name '{name}'. Do you want to create it? (y/n)")
+        choice = input().strip().lower()
+        if choice == 'y':
+            record = Record(name)
+            book.add_record(record)
+            print(f"New contact '{name}' created.")
+        else:
+            return f"No contact created. Operation canceled."
+
+    # Check if the birthday is already set
     try:
         record.set_birthday(birthday_day)
         return message

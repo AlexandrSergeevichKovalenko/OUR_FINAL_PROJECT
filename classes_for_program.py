@@ -242,15 +242,41 @@ class AddressBook(UserDict):
         return upcoming_birthdays
 
 
-    #str method is created to output the content in an understandable way
     def __str__(self):
-        output = ["AddressBook: "]
-        for key in self.data:
-            contact_description_line = (f"name: {self.data[key]}")                   
-            output.append(contact_description_line)
-        total_info_line = "\n".join(output)
-        return total_info_line
-    
+        """
+        Returns a formatted string with all contacts' data,
+        highlighting fields with Rich markup.
+        """
+        if not self.data:
+            return "[bold red]No contacts found.[/bold red]"
+
+        output = []
+        for record in self.data.values():
+            # Phones
+            phones_str = ", ".join(p.value for p in record.phones) if record.phones else "N/A"
+            # Birthday
+            birthday_str = record.birthday.value.strftime("%d.%m.%Y") if record.birthday else "N/A"
+            # Email
+            email_str = record.email.value if record.email else "N/A"
+            # Address
+            address_str = record.address.value if record.address else "N/A"
+
+            contact_info = (
+                "[bold cyan]Name:[/] "
+                f"{record.name.value}\n"
+                "[bold yellow]Phones:[/] "
+                f"{phones_str}\n"
+                "[bold magenta]Birthday:[/] "
+                f"{birthday_str}\n"
+                "[bold green]Email:[/] "
+                f"{email_str}\n"
+                "[bold blue]Address:[/] "
+                f"{address_str}"
+            )
+            output.append(contact_info)
+
+        return "\n\n" + "\n\n".join(output)
+
 # =========================== Note AND NoteBook ===========================
 
 class Note:
@@ -258,7 +284,8 @@ class Note:
     Represents a note with a title, optional note text, and tags.
     Supports adding notes and tags.
     """
-    def __init__(self, title, note = None):
+
+    def __init__(self, title, note=None):
         self.title = title
         self.tags = []
         self.note = note
@@ -269,38 +296,42 @@ class Note:
 
     def add_tags(self, tags):
         """Add tags to the note."""
+        # Sort and add unique tags
+        tags = [tag.strip() for tag in tags if tag.strip()]
         tags.sort()
         for tag in tags:
             if tag not in self.tags:
                 self.tags.append(tag)
 
     def __str__(self):
+        """
+        Returns a string representing the note:
+        Title, note text, and tags.
+        """
+        note_str = self.note if self.note else "N/A"
         if self.tags:
-            return (f"""✨ Title: {self.title}
-📜 Note: {self.note}
-🏷️ Tags: {",".join(tag for tag in self.tags)}""")
+            tags_str = ", ".join(self.tags)
+            return f"[bold cyan]Title:[/] {self.title}\n[bold yellow]Note:[/] {note_str}\n[bold magenta]Tags:[/] {tags_str}"
         else:
-            return (f"""✨Title: {self.title}
-📜Note: {self.note}""")
+            return f"[bold cyan]Title:[/] {self.title}\n[bold yellow]Note:[/] {note_str}"
+
 
 
 class NoteBook(UserDict):
-
     """
-    A container for storing and managing multiple notes
+    A container for storing and managing multiple notes.
     Supports:
     - add, find, delete notes
     """
+
     def add_record(self, note: Note):
         """Add a Note instance to the notebook."""
         self.data[note.title] = note
 
     def find(self, title: str) -> Note:
         """Find a note by title. Returns the Note or None."""
-        if title in self.data:
-            return self.data[title]
-        return None
-    
+        return self.data.get(title)
+
     def sorted_notes_by_tags(self):
         """Sort notes by tags."""
         return sorted(self.data.values(), key=lambda x: x.tags)
@@ -315,11 +346,16 @@ class NoteBook(UserDict):
         ]
         return result
 
-    def delete(self, title:str) -> None:
+    def delete(self, title: str) -> None:
         """Delete a note by title, if it exists."""
         if title in self.data:
             del self.data[title]
 
     def __str__(self):
-        return '\n'.join(str(note) for note in self.data.values())
-    
+        """
+        Returns a concatenation of all notes' string representations.
+        If empty, returns a message.
+        """
+        if not self.data:
+            return "[bold red]No notes found.[/bold red]"
+        return "\n\n".join(str(note) for note in self.data.values())
