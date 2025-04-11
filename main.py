@@ -1,6 +1,6 @@
 from functions_block import load_data, save_data
 from interactive_menu import InteractiveMenu
-from classes_from_program import *
+from classes_for_program import *
 
 if __name__ == '__main__':
     book = load_data(FILENAME)

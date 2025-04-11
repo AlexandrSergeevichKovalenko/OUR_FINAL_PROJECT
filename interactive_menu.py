@@ -2,9 +2,9 @@ from prompt_toolkit import prompt
 from rich.console import Console
 from rich.panel import Panel
 
-from classes_for_program import Note
+from classes_for_program import *
 from functions_block import (
-    add_contact, change_contact, remove_contact, show_all, add_birthday,
+    add_contact, change_contact, remove_contact, show_all, set_birthday,
     birthdays, add_email, change_email, add_address, change_address, save_data
 )
 from note_functions import (
@@ -178,22 +178,22 @@ class InteractiveMenu:
                 phone = self.prompt_input("Enter phone number (10 digits) (or 'cancel'): ")
                 if phone:
                     console.print(add_contact([name, phone], book))
-                    self.save_data(book)
+                    #self.save_data(book, FILENAME)
             elif sub_choice == '2':
                 email = self.prompt_input("Enter email (or 'cancel'): ")
                 if email:
                     console.print(add_email([name, email], book))
-                    self.save_data(book)
+                    #self.save_data(book, FILENAME)
             elif sub_choice == '3':
                 address = self.prompt_input("Enter address (or 'cancel'): ")
                 if address:
                     console.print(add_address([name, address], book))
-                    self.save_data(book)
+                    #self.save_data(book, FILENAME)
             elif sub_choice == '4':
                 birthday = self.prompt_input("Enter birthday (DD.MM.YYYY) (or 'cancel'): ")
                 if birthday:
-                    console.print(add_birthday([name, birthday], book))
-                    self.save_data(book)
+                    console.print(set_birthday([name, birthday], book))
+                    #self.save_data(book, FILENAME)
             else:
                 console.print("[bold red]Invalid option, please try again.[/bold red]")
             prompt("Press Enter to continue...")
@@ -213,22 +213,22 @@ class InteractiveMenu:
                 new_phone = self.prompt_input("Enter new phone number (or 'cancel'): ")
                 if new_phone:
                     console.print(change_contact([name, "", new_phone], book))
-                    self.save_data(book)
+                    #self.save_data(book, FILENAME)
             elif sub_choice == '2':
                 new_email = self.prompt_input("Enter new email (or 'cancel'): ")
                 if new_email:
                     console.print(change_email([name, new_email], book))
-                    self.save_data(book)
+                    #self.save_data(book, FILENAME)
             elif sub_choice == '3':
                 new_address = self.prompt_input("Enter new address (or 'cancel'): ")
                 if new_address:
                     console.print(change_address([name, new_address], book))
-                    self.save_data(book)
+                    #self.save_data(book, FILENAME)
             elif sub_choice == '4':
                 new_birthday = self.prompt_input("Enter new birthday (DD.MM.YYYY) (or 'cancel'): ")
                 if new_birthday:
-                    console.print(add_birthday([name, new_birthday], book))
-                    self.save_data(book)
+                    console.print(set_birthday([name, new_birthday], book))
+                    #self.save_data(book, FILENAME)
             elif sub_choice in ['5', '6', '7', '8']:
                 console.print("Remove functionality (not implemented yet)")
             else:
@@ -256,7 +256,7 @@ class InteractiveMenu:
         answer = self.prompt_input("Are you sure you want to delete this contact? (y/n): ")
         if answer and answer.lower() == "y":
             console.print(remove_contact([name], book))
-            self.save_data(book)
+            #self.save_data(book, FILENAME)
         else:
             console.print("Deletion cancelled.")
         prompt("Press Enter to continue...")
@@ -440,10 +440,10 @@ class InteractiveMenu:
 
 # =========================== End of InteractiveMenu Class ===========================
 
-if __name__ == '__main__':
-    from functions_block import load_data, save_data
-    from note_functions import NoteBook
-    book = load_data()
-    notebook = NoteBook()
-    menu = InteractiveMenu()
-    menu.run(book, notebook)
+# if __name__ == '__main__':
+#     from functions_block import load_data, save_data
+#     from note_functions import NoteBook
+#     book = load_data()
+#     notebook = NoteBook()
+#     menu = InteractiveMenu()
+#     menu.run(book, notebook)
