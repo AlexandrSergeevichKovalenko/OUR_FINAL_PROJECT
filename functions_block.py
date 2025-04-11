@@ -252,17 +252,17 @@ def birthdays(book, args):
 
 
 #book instance serialization function using pickle module    
-def save_data(book, filename = FILENAME):
+def save_data(book, filename):
     with open(filename, "wb") as record_file:
         pickle.dump(book, record_file)
 
 #loading book from file or creating a new book instance if there is no file
-def load_data():
-    if FILENAME.is_file():
+def load_data(filename):
+    if filename.is_file():
         try:
-            with open(FILENAME, "rb") as record_file:
+            with open(filename, "rb") as record_file:
                 return pickle.load(record_file)
         except (pickle.UnpicklingError, EOFError, FileNotFoundError):
             print("A mistake occurred trying to load the data")
-    
-    return AddressBook()
+    result = AddressBook() if filename == FILENAME else NoteBook()
+    return result

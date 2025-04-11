@@ -14,32 +14,38 @@ def parse_input(user_input):
     data = parts[1] if len(parts) > 1 else ""
     return cmd, data
 
-def print_help():
-    """
-    Displays a well-formatted list of available commands.
-    """
-    commands = {
-        "add [name] [phone]": "Add a new contact or phone to existing contact",
-        "change-name [old name] [new name]": "Change the contact name",
-        "del [name]": "Delete the contact",
-        "change-phone [name] [old] [new]": "Change a phone number",
-        "search [pattern]": "Show records according search pattern",
-        "all": "Show all contacts",
-        "set-birthday [name] [DD.MM.YYYY]": "Set birthday to a contact",
-        "show-birthday [name]": "Show birthday for a contact",
-        "birthdays [days]": "Show upcoming birthdays in the next [N] days",
-        "birthdays": "Show upcoming birthdays in the next 7 days",
-        "add-email [name] [email]": "Add or update email for a contact",
-        "change-email [name] [new_email]": "Change email for a contact",
-        "show-email [name]": "Show email for a contact",
-        "remove-email [name]": "Remove email from a contact",
-        "add-address [name] [address]": "Add or update address for a contact",
-        "change-address [name] [new_address]": "Change address for a contact",
-        "show-address [name]": "Show address for a contact",
-        "remove-address [name]": "Remove address from a contact",
-        "hello": "Get a greeting from the bot",
-        "close / exit": "Exit the program"
-    }
+
+# def print_help():
+#     """
+#     Displays a well-formatted list of available commands.
+#     """
+#     commands = {
+#         "add [name] [phone]": "Add a new contact or phone to existing contact",
+#         "change [name] [old] [new]": "Change a phone number",
+#         "phone [name]": "Show phone numbers for a contact",
+#         "all": "Show all contacts",
+#         "add-birthday [name] [DD.MM.YYYY]": "Add birthday to a contact",
+#         "show-birthday [name]": "Show birthday for a contact",
+#         "birthdays [days]": "Show upcoming birthdays in the next [N] days",
+#         "birthdays": "Show upcoming birthdays in the next 7 days",
+#         "add-email [name] [email]": "Add or update email for a contact",
+#         "change-email [name] [new_email]": "Change email for a contact",
+#         "show-email [name]": "Show email for a contact",
+#         "remove-email [name]": "Remove email from a contact",
+#         "add-address [name] [address]": "Add or update address for a contact",
+#         "change-address [name] [new_address]": "Change address for a contact",
+#         "show-address [name]": "Show address for a contact",
+#         "remove-address [name]": "Remove address from a contact",
+#         "add-note": "Add a new note",
+#         "change-note": "Change an existing note",
+#         "show-note": "Show a specific note",
+#         "show-all-notes": "Show all notes",
+#         "sorted-notes-by-tags": "Display notes sorted by tags",
+#         "remove-note": "Remove a note",
+#         "hello": "Get a greeting from the bot",
+#         "close / exit": "Exit the program"
+#     }
+
 
     print("\nAvailable commands:")
     for cmd, desc in commands.items():
@@ -85,14 +91,8 @@ def main():
             elif command == "add":
                 print(add_contact(data.split(), book))
 
-            elif command == "del":
-                print(del_contact(data.split(), book))
-
-            elif command == "change-name":
+            elif command == "change":
                 print(change_contact(data.split(), book))
-
-            elif command == "change-phone":
-                print(change_phone(data.split(), book))
 
             elif command == "search":
                 show_search_result(search_records(data.split(), book))

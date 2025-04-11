@@ -5,6 +5,7 @@ from pathlib import Path
 
 #global variable(name of the file) for storaging all program progress
 FILENAME = Path("addressbook.pkl")
+NOTEFILENAME = Path("notebook.pkl")
 
 # ========================= BASE FIELD AND ITS SUBCLASSES ==========================
 
@@ -275,12 +276,12 @@ class Note:
 
     def __str__(self):
         if self.tags:
-            return (f"""{"✨"} Title: {self.title}
-{"📜"} Note: {self.note}
-{"🏷️"} Tage: {",".join(tag for tag in self.tags)}""")
+            return (f"""✨ Title: {self.title}
+📜 Note: {self.note}
+🏷️ Tags: {",".join(tag for tag in self.tags)}""")
         else:
-            return (f"""{"✨"}Title: {self.title}
-{"📜"}Note: {self.note}""")
+            return (f"""✨Title: {self.title}
+📜Note: {self.note}""")
 
 
 class NoteBook(UserDict):
@@ -303,6 +304,16 @@ class NoteBook(UserDict):
     def sorted_notes_by_tags(self):
         """Sort notes by tags."""
         return sorted(self.data.values(), key=lambda x: x.tags)
+    
+    def search_notes(self, search_string: str):
+        """Search notes by a string in the title or note text or tags."""
+        pattern = fr"\b{re.escape(search_string)}\b"
+        result = [
+            note for note in self.data.values() if re.search(pattern, note.title, re.IGNORECASE) 
+                                                or re.search(pattern, note.note, re.IGNORECASE)
+                                                or re.search(pattern, ','.join(note.tags), re.IGNORECASE)
+        ]
+        return result
 
     def delete(self, title:str) -> None:
         """Delete a note by title, if it exists."""
