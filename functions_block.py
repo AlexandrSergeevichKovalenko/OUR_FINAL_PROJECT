@@ -19,12 +19,46 @@ def add_contact(args, book: AddressBook):
     return message
 
 @input_error(expected_arg_count=3)
-def change_contact(args, book: AddressBook):
+def change_phone(args, book: AddressBook):
     name, old_number, new_number, *_ = args
     record = book.find(name)
     if record:
         record.edit_phone(old_number, new_number)
         return "Contact updated."
+    else:
+        return f"There is no person with {name} name"
+
+# @input_error(expected_arg_count=2)
+def change_contact(args, book: AddressBook):
+    """
+    Function for change name of contact'.
+    change_contact(old_name: string, new_name: string) -> result message
+    """
+    old_name, new_name, *_ = args
+    new_record = book.find(new_name)
+    old_record = book.find(old_name)
+    if new_record:
+        return f"Contact with name: {new_name} already exist."
+    else:
+        if old_record:
+            book.data[new_name] = book.data.pop(old_name)
+            book.data[new_name].name.value = new_name
+            return f"Contact name: {old_name} changed to {new_name}."
+        else:
+            return f"Contact with name: {new_name} not found"
+        
+@input_error(expected_arg_count=0)
+def del_contact(args, book: AddressBook):
+    """
+    Function for delete contact from Address book'.
+    del_contact(name: string) -> result message
+    """
+    name, *_ = args
+    record = book.find(name)
+    if record:
+        if input('Are you shure ? (y/n)').lower() == 'y': 
+            del book.data[name]
+            return f"Contact {name} deleted."
     else:
         return f"There is no person with {name} name"
 
@@ -41,14 +75,15 @@ def search_records(args, book: AddressBook):
     Usage: search [search_string] 
     """
     records = []
-    search_string = str(args[0])
+    search_string = str(args[0]).lower()
     for k, v in book.data.items():
-        strN = v.name.value
-        strB = v.birthday.value.strftime("%d.%m.%Y") if v.birthday else "│"
+        strN = v.name.value + '│'
+        strB = v.birthday.value.strftime("%d.%m.%Y") if v.birthday else '│'
         strPhones = '│'.join(vp.value for vp in v.phones)
-        strEmail = v.email.value if v.email else ""
-        target_string = strN + strB + strPhones + strEmail
-        if search_string in target_string:
+        strEmail = '│' + v.email.value if v.email else '│'
+        strAddress = '│' + v.address.value if v.address else '│'
+        target_string = strN + strB + strPhones + strEmail + strAddress
+        if search_string in target_string.lower():
             records.append(v)          
     return records       
     
@@ -56,6 +91,8 @@ def show_search_result(result: list):
     if result: 
         for i in result:
             print(f'{i}')
+    else:
+        print('Not found!')
 
 @input_error(expected_arg_count=2)
 def set_birthday(args, book):
