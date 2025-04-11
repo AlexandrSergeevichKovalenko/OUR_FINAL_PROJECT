@@ -5,6 +5,7 @@ from pathlib import Path
 
 #global variable(name of the file) for storaging all program progress
 FILENAME = Path("addressbook.pkl")
+NOTEFILENAME = Path("notebook.pkl")
 
 # ========================= BASE FIELD AND ITS SUBCLASSES ==========================
 
@@ -89,7 +90,7 @@ class Address(Field):
         return re.fullmatch(pattern, address) is not None
 
 # =========================== RECORD AND ADDRESSBOOK ===========================
-
+ 
 class Record:
     """
     Stores contact information:
@@ -106,7 +107,7 @@ class Record:
         self.email = None
         self.address = None
 
-    def add_birthday(self, data: str):
+    def set_birthday(self, data: str):
         """Set or update the contact's birthday."""
         self.birthday = Birthday(data)
 
@@ -275,7 +276,7 @@ class AddressBook(UserDict):
             output.append(contact_info)
 
         return "\n\n" + "\n\n".join(output)
-    
+
 # =========================== Note AND NoteBook ===========================
 
 class Note:
@@ -315,6 +316,7 @@ class Note:
             return f"[bold cyan]Title:[/] {self.title}\n[bold yellow]Note:[/] {note_str}"
 
 
+
 class NoteBook(UserDict):
     """
     A container for storing and managing multiple notes.
@@ -333,6 +335,16 @@ class NoteBook(UserDict):
     def sorted_notes_by_tags(self):
         """Sort notes by tags."""
         return sorted(self.data.values(), key=lambda x: x.tags)
+    
+    def search_notes(self, search_string: str):
+        """Search notes by a string in the title or note text or tags."""
+        pattern = fr"\b{re.escape(search_string)}\b"
+        result = [
+            note for note in self.data.values() if re.search(pattern, note.title, re.IGNORECASE) 
+                                                or re.search(pattern, note.note, re.IGNORECASE)
+                                                or re.search(pattern, ','.join(note.tags), re.IGNORECASE)
+        ]
+        return result
 
     def delete(self, title: str) -> None:
         """Delete a note by title, if it exists."""

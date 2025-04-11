@@ -18,10 +18,11 @@ def add_note(book):
     while True:
         title = input("✨ Enter a title or (back) to return to the main menu: ").strip().lower()
         if title == "back":
-            return "Back to main menu."
+            return "Back to main menu"
         elif title:
             note = input("📜 Enter a note: ").strip().lower()
             tags = input("🏷️ Enter tags or (n): ").strip().lower()
+
             if tags != "n":
                 tags = tags.split(",")
                 tags = [tag.strip() for tag in tags]
@@ -109,45 +110,36 @@ def remove_note(book, title=None):
     else:
         return "Note not found."
 
-def sorted_notes_by_tags(book):
+def search_note(command):
     """
-    Sort notes by tags.
+    Sort notes by tags or search for a specific word in the notes by title, note, tags.
     If the notebook is empty, returns a message indicating so.
     If the notebook is not empty, sorts the notes by tags and displays them.
     """
-    if book:
-        sorted_note = book.sorted_notes_by_tags()
-        panels = [
-            Panel(
-                Text(str(note), style="bold dark_blue", no_wrap=True),
-                style="on light_green",
-                border_style="dark_green",
-                expand=False
-            ) for note in sorted_note
-        ]
-        print("--" * 40)
-        console.print(Text("Notes sorted by tags", style="bold dark_blue"))
-        for panel in panels:
-            console.print(panel)
-            print()
-        print("--" * 40)
-    else:
-        print(f"{Fore.RED}NoteBook is empty{Fore.RESET}")
+    def inner(book):
+        if book:
+            if command == "search-notes":
+                word = input(f"🔍 Enter a words to search for:").lower()
 
-# Function to save and load notes using pickle
-NOTES_FILENAME = Path("notebook.pkl")
+            STR = {
+                "sorted-notes-by-tags": lambda : book.sorted_notes_by_tags()
+                ,"search-notes": lambda : book.search_notes(word)
+            }   
 
-def save_notes(notebook, filename=NOTES_FILENAME):
-    """Serialize the NoteBook object to a file."""
-    with open(filename, "wb") as f:
-        pickle.dump(notebook, f)
-
-def load_notes(filename=NOTES_FILENAME):
-    """Load the NoteBook object from a file. Return a new NoteBook if not found or error occurs."""
-    if filename.is_file():
-        try:
-            with open(filename, "rb") as f:
-                return pickle.load(f)
-        except (pickle.UnpicklingError, EOFError, FileNotFoundError):
-            print("Error occurred while loading the notes data.")
-    return NoteBook()
+            sorted_note = STR[command]()
+            if sorted_note:
+                panels = [
+                    Panel(
+                        Text(str(note), style="bold dark_blue", no_wrap=True),
+                        border_style="dark_green",
+                        expand=False)  for note in sorted_note]
+                print("--" * 50)
+                for panel in panels:
+                    console.print(panel)
+                    print()
+                print("--" * 50)
+            else:
+                print("No notes found with that title, tag or note.")
+        else:
+            print("NoteBook is empty.")
+    return inner
