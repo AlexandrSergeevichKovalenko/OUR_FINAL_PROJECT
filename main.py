@@ -14,6 +14,7 @@ def parse_input(user_input):
     data = parts[1] if len(parts) > 1 else ""
     return cmd, data
 
+
 # def print_help():
 #     """
 #     Displays a well-formatted list of available commands.
@@ -45,6 +46,7 @@ def parse_input(user_input):
 #         "close / exit": "Exit the program"
 #     }
 
+
     print("\nAvailable commands:")
     for cmd, desc in commands.items():
         print(f"  {cmd.ljust(35)} - {desc}")
@@ -52,15 +54,15 @@ def parse_input(user_input):
 
 
 @contextmanager
-def record_manager():
+def record_manager(file):
     """
     use context manager to operate safely 
     """
-    book = load_data()
+    book = load_data(file)
     try:
         yield book
     finally:
-        save_data(book)
+        save_data(book, file)
 
 
 def main():
@@ -68,8 +70,7 @@ def main():
     Command-line assistant for managing contacts.
     Loads previous state from file, and saves data on exit.
     """
-    with record_manager() as book:
-        notebook = NoteBook()
+    with record_manager(FILENAME) as book, record_manager(NOTEFILENAME) as notebook:
         print("Welcome to the assistant bot!")
         print("Type 'help' to see available commands.")
         while True:
@@ -93,15 +94,15 @@ def main():
             elif command == "change":
                 print(change_contact(data.split(), book))
 
-            elif command == "phone":
-                print(show_phone(data.split(), book))
+            elif command == "search":
+                show_search_result(search_records(data.split(), book))
 
             elif command == "all":
                 print(show_all(book))
 
-            elif command == "add-birthday":
-                print(add_birthday(data.split(), book))
-
+            elif command == "set-birthday":
+                print(set_birthday(data.split(), book))
+            
             elif command == "show-birthday":
                 print(show_birthday(data.split(), book))
 

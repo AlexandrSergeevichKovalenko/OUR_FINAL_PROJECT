@@ -28,28 +28,39 @@ def change_contact(args, book: AddressBook):
     else:
         return f"There is no person with {name} name"
 
-@input_error(expected_arg_count=1)
-def show_phone(args, book: AddressBook):
-    name = args[0]
-    record = book.find(name)
-    phone_result = f"{name}'s phone is "
-    if record:
-        for r in record.phones:
-            phone_result += f"{r.value} "
-        return phone_result
-    else:
-        return f"The name {name} you have asked for does not exist."
-    
 def show_all(book: AddressBook):
     if len(book.data) != 0:
         return str(book)
     else:
         return "There is no data to output."
 
+@input_error(expected_arg_count=1)
+def search_records(args, book: AddressBook):
+    """
+    Search string in all attributes of contact in addressbook.
+    Usage: search [search_string] 
+    """
+    records = []
+    search_string = str(args[0])
+    for k, v in book.data.items():
+        strN = v.name.value
+        strB = v.birthday.value.strftime("%d.%m.%Y") if v.birthday else "│"
+        strPhones = '│'.join(vp.value for vp in v.phones)
+        strEmail = v.email.value if v.email else ""
+        target_string = strN + strB + strPhones + strEmail
+        if search_string in target_string:
+            records.append(v)          
+    return records       
+    
+def show_search_result(result: list):
+    if result: 
+        for i in result:
+            print(f'{i}')
+
 @input_error(expected_arg_count=2)
-def add_birthday(args, book):
+def set_birthday(args, book):
     name, birthday_day, *_ = args
-    message = "Birthday added."
+    message = "Birthday is set."
     record = book.find(name)
 
     if record is None:
@@ -57,7 +68,7 @@ def add_birthday(args, book):
     
     # to be sure that a user will not enter date, which is not exist, like 31.02.2020 (there is a check in __init__, but only for the correct format of an inputted data).
     try:
-        record.add_birthday(birthday_day)
+        record.set_birthday(birthday_day)
         return message
     except ValueError as e:
         return str(e)
@@ -73,7 +84,7 @@ def show_birthday(args, book):
             return f"{name}'s birthday is on {record.birthday.value.strftime('%d.%m.%Y')}"
         else:
             return f"{name} does not have a birthday set."
-
+        
 @input_error(expected_arg_count=2)
 def add_email(args, book: AddressBook):
     """
@@ -204,17 +215,17 @@ def birthdays(book, args):
 
 
 #book instance serialization function using pickle module    
-def save_data(book, filename = FILENAME):
+def save_data(book, filename):
     with open(filename, "wb") as record_file:
         pickle.dump(book, record_file)
 
 #loading book from file or creating a new book instance if there is no file
-def load_data():
-    if FILENAME.is_file():
+def load_data(filename):
+    if filename.is_file():
         try:
-            with open(FILENAME, "rb") as record_file:
+            with open(filename, "rb") as record_file:
                 return pickle.load(record_file)
         except (pickle.UnpicklingError, EOFError, FileNotFoundError):
             print("A mistake occurred trying to load the data")
-    
-    return AddressBook()
+    result = AddressBook() if filename == FILENAME else NoteBook()
+    return result
