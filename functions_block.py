@@ -47,15 +47,23 @@ def show_all(book: AddressBook):
         return "There is no data to output."
 
 @input_error(expected_arg_count=2)
-def add_birthday(args, book):
+def add_birthday(args, book: AddressBook):
     name, birthday_day, *_ = args
     message = "Birthday added."
     record = book.find(name)
 
     if record is None:
-        return f"There is no person with {name} name"
-    
-    # to be sure that a user will not enter date, which is not exist, like 31.02.2020 (there is a check in __init__, but only for the correct format of an inputted data).
+        # If the contact does not exist, prompt to create it
+        print(f"There is no contact with the name '{name}'. Do you want to create it? (y/n)")
+        choice = input().strip().lower()
+        if choice == 'y':
+            record = Record(name)
+            book.add_record(record)
+            print(f"New contact '{name}' created.")
+        else:
+            return f"No contact created. Operation canceled."
+
+    # Check if the birthday is already set
     try:
         record.add_birthday(birthday_day)
         return message

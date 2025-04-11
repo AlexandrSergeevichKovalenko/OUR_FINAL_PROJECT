@@ -17,33 +17,39 @@ def input_error(expected_arg_count=None):
     def decorator(func):
         def inner(*args, **kwargs):
             try:
-                # checking arguments availability
+                # Check if arguments are provided
                 if not args:
                     raise IndexError(error_messages["IndexError"])
+
+                # For functions like show_phone, ensure that the first argument is not empty
                 if not args[0] and func.__name__ in ["show_phone"]:
                     raise ValueError(error_messages["NoNameError"])
-                if expected_arg_count is not None and len(args[0]) != expected_arg_count:
+
+                # Validate that the expected number of arguments is provided
+                if expected_arg_count is not None and len(args[0]) < expected_arg_count:
                     if func.__name__ in ["add_contact", "change_contact"]:
                         raise ValueError(error_messages["IncorrectDataInput"])
-                # checking additionally some specific functions
+
+                # For add_contact and change_contact, validate name and phone
                 if func.__name__ in ["add_contact", "change_contact"]:
                     if not args[0][0].isalpha():
                         raise ValueError(error_messages["InvalidName"])
                     if not args[0][1].isdigit():
                         raise ValueError(error_messages["InvalidPhone"])
-                # Checking email for add_email and change_email functions
+
+                # For add_email and change_email, validate email format
                 if func.__name__ in ["add_email", "change_email"]:
                     if "@" not in args[0][1] or "." not in args[0][1]:
                         raise ValueError(error_messages["InvalidEmail"])
-                # Checking address for add_address and change_address functions
+
+                # For add_address and change_address, validate address format using Address.validate
                 if func.__name__ in ["add_address", "change_address"]:
-                    # Validate the address using Address.validate method
-                    from classes_for_program import Address
+                    from classes_for_program import \
+                        Address  # Импорт внутри функции для избежания циклических зависимостей
                     if not Address.validate(args[0][1]):
                         raise ValueError(error_messages["InvalidAddress"])
 
                 return func(*args, **kwargs)
-
             except Exception as e:
                 return str(e)
 

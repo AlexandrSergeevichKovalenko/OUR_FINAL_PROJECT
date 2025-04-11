@@ -1,0 +1,39 @@
+Main Menu
+    1. Manage Contacts
+         ├─ 1. Add Contact
+         │      ├─ Add Phone, Add Email, Add Address, Add Birthday
+         │      └─ Back (cancel)
+         ├─ 2. Change Contact
+         │      ├─ Change Phone, Change Email, Change Address, Change Birthday,
+         │      ├─ Remove Phone, Remove Email, Remove Address, Remove Birthday
+         │      └─ Back (cancel)
+         ├─ 3. Show Contact
+         ├─ 4. Show All Contacts
+         ├─ 5. Remove Contact
+         ├─ 6. Birthday in next week
+         ├─ 7. Birthday in next X days
+         └─ Back to Main Menu
+    2. Manage Notes
+         ├─ 1. Add Note
+         ├─ 2. Change Note
+         ├─ 3. Show Note
+         ├─ 4. Show All Notes
+         ├─ 5. Add Tags to Note
+         ├─ 6. Remove Note
+         └─ Back to Main Menu
+    3. Search
+         ├─ 1. Search Contacts
+         │      ├─ Search by Name
+         │      ├─ Search by Phone
+         │      ├─ Search by Email
+         │      ├─ Search by Address
+         │      ├─ Search by Birthday
+         │      └─ Back
+         ├─ 2. Search Notes
+         │      ├─ Search by Tag
+         │      ├─ Search by Title
+         │      ├─ Search by Content
+         │      └─ Back
+         └─ Back to Main Menu
+    4. Help
+    5. Exit
