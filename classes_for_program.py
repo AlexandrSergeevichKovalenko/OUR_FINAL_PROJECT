@@ -308,9 +308,9 @@ class Note:
         note_str = self.note if self.note else "N/A"
         if self.tags:
             tags_str = ", ".join(self.tags)
-            return f"[bold cyan]Title:[/] {self.title}\n[bold yellow]Note:[/] {note_str}\n[bold magenta]Tags:[/] {tags_str}"
+            return f"Title: {self.title}\nNote: {note_str}\nTags: {tags_str}"
         else:
-            return f"[bold cyan]Title:[/] {self.title}\n[bold yellow]Note:[/] {note_str}"
+            return f"Title: {self.title}\nNote: {note_str}"
 
 
 class NoteBook(UserDict):
@@ -330,19 +330,26 @@ class NoteBook(UserDict):
 
     def search_by_tags_and_sort_by_title(self, tags):
         """Search by tags and sort by title."""
-        notes = [note for note in self.data.values() if any(tag.strip() in note.tags for tag in tags)]
+        notes = [
+            note for note in self.data.values()
+            if any(tag in [t.lower() for t in note.tags] for tag in tags)
+        ]
         if not notes:
-            return "[bold red]No notes found with that tag.[/bold red]"
-        return sorted(notes, key=lambda x: x.title)
+            return None
+        result = sorted(notes, key=lambda x: x.title)
+        return result
     
     def search_notes(self, search_string: str):
         """Search notes by a word in the title, note text or tags."""
-        result = [
-            note for note in self.data.values() if re.search(search_string, note.title, re.IGNORECASE) 
-                                                or re.search(search_string, note.note, re.IGNORECASE)
-                                                or re.search(search_string, ','.join(note.tags), re.IGNORECASE)
-        ]
-        return result
+        if search_string:
+            result = [
+                note for note in self.data.values() if re.search(search_string, note.title, re.IGNORECASE) 
+                                                    or re.search(search_string, note.note, re.IGNORECASE)
+                                                    or re.search(search_string, ','.join(note.tags), re.IGNORECASE)
+            ]
+            if not result:
+                return None
+            return result
 
     def delete(self, title: str) -> None:
         """Delete a note by title, if it exists."""

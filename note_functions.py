@@ -2,10 +2,6 @@ from classes_for_program import *
 from rich.panel import Panel
 from rich.text import Text
 from rich.console import Console
-from colorama import Fore
-import pickle
-from pathlib import Path
-from classes_for_program import NoteBook
 
 console = Console()
 
@@ -117,12 +113,16 @@ def search_note(command):
     If the notebook is not empty, sorts the notes by tags and displays them.
     """
     COMMANDS = {
-        "search-notes" : lambda: input(f"🔍 Enter words to search for:"),
-        "search-by_tags-and-sort-by-title" : lambda: input(f"🏷️ Enter tags to sort by:").lower()
+        "search-notes" : lambda: input(f"🔍 Enter words to search for:")
+        ,"search-by-tags-and-sort-by-title" : lambda: input(f"🏷️ Enter tags to sort by:").lower()
     }
     def inner(book):
         if book:
             input_text = COMMANDS[command]()
+            if command == "search-by-tags-and-sort-by-title":
+                input_text = [tag.strip().lower() for tag in input_text.split(',') if tag.strip()]
+            else:
+                input_text = input_text.strip().lower()
             STR = {
                 "search-by-tags-and-sort-by-title": lambda : book.search_by_tags_and_sort_by_title(input_text)
                 ,"search-notes": lambda : book.search_notes(input_text)
@@ -130,18 +130,12 @@ def search_note(command):
 
             sorted_note = STR[command]()
             if sorted_note:
-                panels = [
-                    Panel(
-                        Text(str(note), style="bold dark_blue", no_wrap=True),
-                        border_style="dark_green",
-                        expand=False)  for note in sorted_note]
                 print("--" * 50)
-                for panel in panels:
-                    console.print(panel)
-                    print()
+                for note in sorted_note:
+                    console.print(Panel.fit(str(note), border_style="#1E90FF"))  # note має повертати Rich Text або Text object
                 print("--" * 50)
             else:
-                print("No notes found with that title, tag or note.")
+                console.print("No notes found.")
         else:
-            print("NoteBook is empty.")
+            console.print("NoteBook is empty.")
     return inner
