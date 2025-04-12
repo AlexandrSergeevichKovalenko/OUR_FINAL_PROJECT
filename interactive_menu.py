@@ -4,8 +4,9 @@ from rich.panel import Panel
 
 from classes_for_program import *
 from functions_block import (
-    add_contact, change_contact, remove_contact, show_all, set_birthday,
-    birthdays, add_email, change_email, add_address, change_address, save_data
+    add_contact, change_phone, remove_contact, show_all, set_birthday,
+    birthdays, add_email, change_email, add_address, change_address, save_data,
+    search_records, rename_contact
 )
 from note_functions import (
     change_note, show_note, show_all_notes, remove_note
@@ -69,16 +70,17 @@ class InteractiveMenu:
 
     def display_change_contact_menu(self):
         menu_text = (
-            "[bold #FFD700]1.[/] Change Phone\n"
-            "[bold #FFD700]2.[/] Change Email\n"
-            "[bold #FFD700]3.[/] Change Address\n"
-            "[bold #FFD700]4.[/] Change Birthday\n"
-            "[bold #FFD700]5.[/] Remove Phone\n"
-            "[bold #FFD700]6.[/] Remove Email\n"
-            "[bold #FFD700]7.[/] Remove Address\n"
-            "[bold #FFD700]8.[/] Remove Birthday\n"
-            "[bold #FF4500]9.[/] Back\n\n"
-            "Enter your choice ([bold #FFD700]1-9[/]): "
+            "[bold #FFD700]1.[/] Change Name\n"
+            "[bold #FFD700]2.[/] Change Phone\n"
+            "[bold #FFD700]3.[/] Change Email\n"
+            "[bold #FFD700]4.[/] Change Address\n"
+            "[bold #FFD700]5.[/] Change Birthday\n"
+            "[bold #FFD700]6.[/] Remove Phone\n"
+            "[bold #FFD700]7.[/] Remove Email\n"
+            "[bold #FFD700]8.[/] Remove Address\n"
+            "[bold #FFD700]9.[/] Remove Birthday\n"
+            "[bold #FF4500]0.[/] Back\n\n"
+            "Enter your choice ([bold #FFD700]1-9(0)[/]): "
         )
         panel = Panel.fit(menu_text, title="Change Contact", border_style="#1E90FF")
         console.print(panel)
@@ -207,29 +209,34 @@ class InteractiveMenu:
         while True:
             console.clear()
             sub_choice = self.display_change_contact_menu()
-            if sub_choice == '9':
+            if sub_choice == '0':
                 break  # Back to Contacts Menu
             elif sub_choice == '1':
-                new_phone = self.prompt_input("Enter new phone number (or 'cancel'): ")
-                if new_phone:
-                    console.print(change_contact([name, "", new_phone], book))
+                new_name = self.prompt_input("Enter new Name (or 'cancel'): ")
+                if new_name:
+                    console.print(rename_contact([name, new_name], book))
                     #self.save_data(book, FILENAME)
             elif sub_choice == '2':
+                new_phone = self.prompt_input("Enter new phone number (or 'cancel'): ")
+                if new_phone:
+                    console.print(change_phone([name, "", new_phone], book))
+                    #self.save_data(book, FILENAME)
+            elif sub_choice == '3':
                 new_email = self.prompt_input("Enter new email (or 'cancel'): ")
                 if new_email:
                     console.print(change_email([name, new_email], book))
                     #self.save_data(book, FILENAME)
-            elif sub_choice == '3':
+            elif sub_choice == '4':
                 new_address = self.prompt_input("Enter new address (or 'cancel'): ")
                 if new_address:
                     console.print(change_address([name, new_address], book))
                     #self.save_data(book, FILENAME)
-            elif sub_choice == '4':
+            elif sub_choice == '5':
                 new_birthday = self.prompt_input("Enter new birthday (DD.MM.YYYY) (or 'cancel'): ")
                 if new_birthday:
                     console.print(set_birthday([name, new_birthday], book))
                     #self.save_data(book, FILENAME)
-            elif sub_choice in ['5', '6', '7', '8']:
+            elif sub_choice in ['6', '7', '8', '9']:
                 console.print("Remove functionality (not implemented yet)")
             else:
                 console.print("[bold red]Invalid option.[/bold red]")
@@ -388,33 +395,45 @@ class InteractiveMenu:
 
     # =========================== Search Handling ===========================
     def handle_search(self, book, notebook):
+        def show_search_result(result: list):
+            if result: 
+                for i in result:
+                    console.print(f'{i}')
+            else:
+                print('Not found!')
+
         while True:
             console.clear()
             choice = self.display_search_menu()
             if choice == '3':  # Back to Main Menu
                 break
             elif choice == '1':
-                console.clear()
-                s_choice = self.display_search_contacts_menu()
-                if s_choice == '6':
-                    continue
-                else:
-                    query = self.prompt_input("Enter search query for contacts (or 'cancel'): ")
-                    if query:
-                        console.print("Search Contacts functionality (not implemented yet)")
-                    prompt("Press Enter to continue...")
+                query = self.prompt_input("Enter search query for contacts (or 'cancel'): ")
+                console.print(Panel(f"Search contacts by string - {query}", style="bold green"))
+                show_search_result(search_records(query, book))
+                prompt("Press Enter to continue...")                
+#                console.clear()
+#                s_choice = self.display_search_contacts_menu()
+#                if s_choice == '6':
+#                    continue
+#                else:
+
+#                    if query:
+#                        console.print("Search Contacts functionality (not implemented yet)")
+#                    prompt("Press Enter to continue...")
             elif choice == '2':
-                console.clear()
-                s_choice = self.display_search_notes_menu()
-                if s_choice == '4':
-                    continue
-                else:
-                    query = self.prompt_input("Enter search query for notes (or 'cancel'): ")
-                    if query:
-                        console.print("Search Notes functionality (not implemented yet)")
-                    prompt("Press Enter to continue...")
-            else:
-                console.print("[bold red]Invalid option in Search Menu.[/bold red]")
+                pass
+#                console.clear()
+#                s_choice = self.display_search_notes_menu()
+#                if s_choice == '4':
+#                    continue
+#                else:
+#                    query = self.prompt_input("Enter search query for notes (or 'cancel'): ")
+#                    if query:
+#                        console.print("Search Notes functionality (not implemented yet)")
+#                    prompt("Press Enter to continue...")
+#            else:
+#                console.print("[bold red]Invalid option in Search Menu.[/bold red]")
                 prompt("Press Enter to continue...")
 
     # =========================== Main Menu Handling ===========================
