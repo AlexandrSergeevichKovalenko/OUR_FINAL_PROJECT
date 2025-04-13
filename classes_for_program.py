@@ -342,8 +342,10 @@ class NoteBook(UserDict):
 
     def search_by_tags_and_sort_by_title(self, input_tags: str):
         """Search by tags and sort by title."""
+        if not input_tags:
+            return None
         input_tags = [tag.strip() for tag in input_tags.split(',') if tag.strip()]
-        pattern = "|".join(tag for tag in input_tags)
+        pattern = "|".join(re.escape(tag) for tag in input_tags)
         notes = [
             note for note in self.data.values() if re.search(pattern , ','.join(note.tags), re.IGNORECASE)
         ]
