@@ -132,7 +132,7 @@ class InteractiveMenu:
             "[bold #FFD700]1.[/] Search by word\n"
             "[bold #FFD700]2.[/] search-by-tags-and-sort-by-title\n"
             "[bold #FF4500]3.[/] Back\n\n"
-            "Enter your choice ([bold #FFD700]1-4[/]): "
+            "Enter your choice ([bold #FFD700]1-3[/]): "
         )
         panel = Panel.fit(menu_text, title="Search Notes", border_style="#1E90FF")
         console.print(panel)
@@ -433,11 +433,21 @@ class InteractiveMenu:
                 s_choice = self.display_search_notes_menu()
                 if s_choice == '1':
                     search_notes = search_note("search-notes")
-                    search_notes(notebook)
+                    notes = search_notes(notebook)
+                    if notes:
+                        for note in notes:
+                            console.print(Panel.fit(str(note), border_style="#1E90FF"))
+                    else:
+                        console.print("[bold red]No notes found.[/bold red]")
                     prompt("Press Enter to continue...")
                 elif s_choice == '2':
                     search_notes = search_note("search-by-tags-and-sort-by-title")
-                    search_notes(notebook)
+                    notes = search_notes(notebook)
+                    if notes:
+                        for note in notes:
+                            console.print(Panel.fit(str(note), border_style="#1E90FF"))
+                    else:
+                        console.print("[bold red]No notes found.[/bold red]")
                     prompt("Press Enter to continue...")
                 elif s_choice == '3':
                     continue

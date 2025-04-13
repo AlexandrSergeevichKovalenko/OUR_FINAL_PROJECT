@@ -1,9 +1,6 @@
 from classes_for_program import *
 from rich.panel import Panel
-from rich.text import Text
-from rich.console import Console
 
-console = Console()
 
 def add_note(book):
     """
@@ -86,7 +83,8 @@ def show_all_notes(book):
     Display all notes in the notebook.
     If the notebook is empty, returns a message indicating so.
     """
-    return str(book) if book else "NoteBook is empty"
+    result = str(book) if book else "NoteBook is empty"
+    return result
 
 def remove_note(book, title=None):
     """
@@ -94,7 +92,7 @@ def remove_note(book, title=None):
     If 'title' is provided, it is used directly; otherwise, the user is prompted.
     """
     if title is None:
-        title = input("✨ Enter a title to remove (or type 'cancel' to return to the main menu): ").strip().lower()
+        title = input("✨ Enter a title to remove or (back) to return to the main menu: ").strip().lower()
     if title == "cancel":
         return "Back to main menu."
     if not title:
@@ -123,14 +121,11 @@ def search_note(command):
                 "search-by-tags-and-sort-by-title": lambda : book.search_by_tags_and_sort_by_title(input_text)
                 ,"search-notes": lambda : book.search_notes(input_text)
             }   
-            sorted_note = STR[command]()
-            if sorted_note:
-                print("--" * 50)
-                for note in sorted_note:
-                    console.print(Panel.fit(str(note), border_style="#1E90FF"))  # note має повертати Rich Text або Text object
-                print("--" * 50)
+            sorted_notes = STR[command]()
+            if sorted_notes:
+                return sorted_notes
             else:
-                console.print("No notes found.")
+                return None
         else:
-            console.print("NoteBook is empty.")
+            return None
     return inner
