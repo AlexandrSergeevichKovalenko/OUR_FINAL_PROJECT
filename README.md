@@ -54,8 +54,8 @@ To build a system that:
 
 - **Language**: 🐍 Python 3
 - **Version Control**: Git, GitHub
-- **Data Storage**: Local file system (e.g., JSON or pickle format)
-- **Libraries**: `datetime`, `re`, `os`, `sys`, and others from Python standard library
+- **Data Storage**: Local file system (pickle format)
+- **Libraries**: `datetime`, `re`, `os`, `sys`, rich, prompt_toolkit
 
 ---
 
@@ -71,14 +71,17 @@ To build a system that:
 
 ```
 OUR_FINAL_PROJECT/
-├── main.py               # Core logic of the assistant
-├── classes_for_program.py # All classes used in the program (except Notes)
-├── decor.py              # Decorator functions
-├── functions_block.py    # All functions (except for notes)
-├── note_class.py         # Class for Notes
-├── note_functions.py     # Functions for managing notes
-├── requirements.txt      # Dependencies for the project
-└── README.md             # Project documentation
+├── main.py                 # Entrance point
+├── classes_for_program.py  # All classes used in the program (except Notes)
+├── decor.py                # Decorator functions
+├── functions_block.py      # All functions (except for notes)
+├── animation.py            # Animation of notes search 
+├── information_display.py  # Information blocks for visualisation
+├── interactive_menu.py     # Command handlers. Core logic of the assistant
+├── note_class.py           # Class for Notes
+├── note_functions.py       # Functions for managing notes
+├── requirements.txt        # Dependencies for the project
+└── README.md               # Project documentation
 ```
 
 ---
