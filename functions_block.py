@@ -42,7 +42,7 @@ def remove_contact(args, book: AddressBook):
     return f"Contact '{name}' removed."
     
 # @input_error(expected_arg_count=2)
-def change_contact(args, book: AddressBook):
+def rename_contact(args, book: AddressBook):
     """
     Function for change name of contact'.
     change_contact(old_name: string, new_name: string) -> result message
@@ -85,13 +85,6 @@ def search_records(args, book: AddressBook):
             records.append(v)          
     return records       
     
-def show_search_result(result: list):
-    if result: 
-        for i in result:
-            print(f'{i}')
-    else:
-        print('Not found!')
-
 @input_error(expected_arg_count=2)
 
 def set_birthday(args, book):
