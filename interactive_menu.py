@@ -28,9 +28,10 @@ class InteractiveMenu:
     def __init__(self):
         self.save_data = save_data
 
-    def display(self, menu_text, title):
+    def display(self, menu_text, title, bclear = True):
         panel = Panel.fit(menu_text, title=title, border_style="#1E90FF")
-        console.clear()
+        if bclear: 
+            console.clear()
         console.print(panel)
         return prompt("> ").strip()
 
@@ -88,7 +89,7 @@ class InteractiveMenu:
         while True:
             console.clear()
             console.print(Panel(f"{book.find(name)}", style="bold green"))            
-            sub_choice = self.display_change_contact_menu(name)
+            sub_choice = self.display(di.display_change_contact_menu, "Add Contact", False)
 
             if sub_choice == '0':
                 break  # Back to Contacts Menu
