@@ -29,7 +29,7 @@ display_add_contact_menu = (
 
 display_change_contact_menu = (
             "[bold #FFD700]1.[/] Change Name\n"
-            "[bold #FFD700]2.[/] Change Phone\n"
+            "[bold #FFD700]2.[/] Add Phone\n"
             "[bold #FFD700]3.[/] Change Email\n"
             "[bold #FFD700]4.[/] Change Address\n"
             "[bold #FFD700]5.[/] Change Birthday\n"
