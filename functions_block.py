@@ -13,18 +13,15 @@ Here are functions whose names clearly matches their logic.
 """
 
 
-@input_error(expected_arg_count=2)
-def add_contact(args, book: AddressBook):
-    name, phone, *_ = args
+@input_error(expected_arg_count=0)
+def add_contact(name, book: AddressBook):
     record = book.find(name)
-    message = "Contact updated."
-    if record is None:
+    if record:
+        return f'Contact {name} already exist!'
+    else: 
         record = Record(name)
         book.add_record(record)
-        message = "Contact added."
-    if phone:
-        record.add_phone(phone)
-    return message
+        return f'Contact {name} successfully added!'
 
 
 @input_error(expected_arg_count=2)

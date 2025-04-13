@@ -31,7 +31,7 @@ def input_error(expected_arg_count=None):
                         raise ValueError(error_messages["IncorrectDataInput"])
 
                 # For add_contact and change_contact, validate name and phone
-                if func.__name__ in ["add_contact", "change_contact"]:
+                if func.__name__ in ["change_contact"]:
                     if not args[0][0].isalpha():
                         raise ValueError(error_messages["InvalidName"])
                     if not args[0][1].isdigit():

@@ -54,7 +54,15 @@ class InteractiveMenu:
         console.clear()
         console.print(Panel("Add Contact", style="bold green"))
         name = self.prompt_input("Enter contact name (or type 'back' to go back): ")
-        if not name:
+        if name:
+            if book.find(name):
+                console.print(f"Contact {name} already exist!")
+                pause()                
+                return
+            else: 
+                console.print(add_contact(name, book))
+                pause()
+        else:
             return
         while True:
             console.clear()
@@ -65,7 +73,7 @@ class InteractiveMenu:
             elif sub_choice == '1':
                 phone = self.prompt_input("Enter phone number (10 digits) (or 'back'): ")
                 if phone:
-                    console.print(add_contact([name, phone], book))
+                    console.print(add_phone([name, phone], book))
             elif sub_choice == '2':
                 email = self.prompt_input("Enter email (or 'back'): ")
                 if email:
@@ -86,7 +94,7 @@ class InteractiveMenu:
         console.clear()
         console.print(Panel("Change Contact", style="bold green"))
         name = self.prompt_input("Enter the contact name to change (or 'back'): ")
-        if name is None:
+        if name.lower() == 'back':
             return
         if not book.find(name):
             console.print(Panel(f"Contact '{name}' not found!", style="bold green"))
@@ -117,7 +125,6 @@ class InteractiveMenu:
                 break  # Back to Contacts Menu
 
             result = None
-
             if sub_choice == '1':
                 new_name = self.prompt_input("Enter new Name (or 'back'): ")
                 if new_name:
