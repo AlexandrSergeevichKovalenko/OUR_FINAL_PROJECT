@@ -111,6 +111,9 @@ class Record:
         """Set or update the contact's birthday."""
         self.birthday = Birthday(data)
 
+    def remove_birthday(self):
+        """Removes the contact's birthday."""
+        self.birthday = None
 
     def add_phone(self, phone_number: str):
         """Add a new phone number to the contact."""
@@ -153,7 +156,7 @@ class Record:
 
     def add_address(self, address: str):
         """Adds or updates the contact's address."""
-        self.address = Address(address)
+        self.address = Address(address)        
 
     def edit_address(self, new_address: str):
         """Replaces the existing address with a new address."""

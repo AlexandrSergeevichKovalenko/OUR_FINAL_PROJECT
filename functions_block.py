@@ -27,6 +27,16 @@ def change_phone(args, book: AddressBook):
         return "Contact updated."
     else:
         return f"There is no person with {name} name"
+
+@input_error(expected_arg_count=2)
+def remove_phone(args, book: AddressBook):
+    name, r_number, *_ = args
+    record = book.find(name)
+    if record:
+        record.remove_phone(r_number)
+        return f"Phone {r_number} removed."
+    else:
+        return f"There is no person with {name} name"    
       
 @input_error(expected_arg_count=1)
 def remove_contact(args, book: AddressBook):
@@ -109,6 +119,19 @@ def set_birthday(args, book):
         return message
     except ValueError as e:
         return str(e)
+    
+@input_error(expected_arg_count=0)
+def remove_birthday(args, book: AddressBook):
+    """
+    Removes the birthday for a contact.
+    Usage: remove_birthday [name]
+    """
+    name, *_ = args
+    record = book.find(name)
+    if record is None or record.birthday is None:
+        return f"No birthday to remove for contact: '{name}'."
+    record.remove_birthday()
+    return f"Birthday of contact:{name} removed."
 
 @input_error(expected_arg_count=1)
 def show_birthday(args, book):
@@ -174,7 +197,7 @@ def remove_email(args, book: AddressBook):
     if record is None or record.email is None:
         return f"No email to remove for contact '{name}'."
     record.remove_email()
-    return "Email removed."
+    return f"Email of contact:{name} removed."
 
 @input_error(expected_arg_count=2)
 def add_address(args, book: AddressBook):
@@ -234,7 +257,7 @@ def remove_address(args, book: AddressBook):
     if record is None or not record.address:
         return f"No address to remove for contact '{name}'."
     record.remove_address()
-    return "Address removed."
+    return f"Address of contact {name} removed."
 
 # forming a string of names of the persons, who should be congratulated and their respective birthday dates.
 def birthdays(book, args):
