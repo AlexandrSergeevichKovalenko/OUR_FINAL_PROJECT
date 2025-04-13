@@ -12,7 +12,7 @@ from note_functions import (
     change_note, show_note, show_all_notes, remove_note, search_note
 )
 import information_display as di
-
+from animation import display_animals
 
 console = Console()
 
@@ -263,7 +263,7 @@ class InteractiveMenu:
             elif choice == '4':
                 console.clear()
                 console.print(Panel("Show All Notes", style="bold green"))
-                console.print(str(show_all_notes(notebook)))
+                console.print(str(notebook))
                 prompt("Press Enter to continue...")
             elif choice == '5':
                 console.clear()
@@ -322,7 +322,7 @@ class InteractiveMenu:
                 if s_choice == '1':
                     search_notes = search_note("search-notes")
                     notes = search_notes(notebook)
-                    
+                    display_animals()
                     console.clear()
                     if notes:
                         for note in notes:
@@ -333,6 +333,8 @@ class InteractiveMenu:
                 elif s_choice == '2':
                     search_notes = search_note("search-by-tags-and-sort-by-title")
                     notes = search_notes(notebook)
+                    display_animals()
+                    console.clear()
                     if notes:
                         for note in notes:
                             console.print(Panel.fit(str(note), border_style="#1E90FF"))
