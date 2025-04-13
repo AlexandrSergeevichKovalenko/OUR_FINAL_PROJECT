@@ -78,7 +78,7 @@ def show_note(book):
             return "Back to main menu."
         elif title:
             record = book.find(title)
-            return f"📜 {record.note}" if record else "Note not found."
+            return f"📜 {record}" if record else "Note not found."
         print("Please enter a title.")
 
 def show_all_notes(book):
@@ -118,16 +118,11 @@ def search_note(command):
     }
     def inner(book):
         if book:
-            input_text = COMMANDS[command]()
-            if command == "search-by-tags-and-sort-by-title":
-                input_text = [tag.strip().lower() for tag in input_text.split(',') if tag.strip()]
-            else:
-                input_text = input_text.strip().lower()
+            input_text = COMMANDS[command]().strip().lower()
             STR = {
                 "search-by-tags-and-sort-by-title": lambda : book.search_by_tags_and_sort_by_title(input_text)
                 ,"search-notes": lambda : book.search_notes(input_text)
             }   
-
             sorted_note = STR[command]()
             if sorted_note:
                 print("--" * 50)
