@@ -81,7 +81,9 @@ class InteractiveMenu:
     def handle_change_contact(self, book):
         console.clear()
         console.print(Panel("Change Contact", style="bold green"))
-        name = self.prompt_input("Enter the contact name to change (or 'cancel'): ")
+        name = self.prompt_input("Enter the contact name to change (or 'back'): ")
+        if name.lower() == 'back':
+            return
         if not book.find(name):
              console.print(Panel(f"Contact {name} not found!", style="bold green"))
              prompt("Press Enter to continue...")
@@ -93,10 +95,13 @@ class InteractiveMenu:
 
             if sub_choice == '0':
                 break  # Back to Contacts Menu
+
+            # Change name
             elif sub_choice == '1':
                 new_name = self.prompt_input("Enter new Name (or 'cancel'): ")
                 if new_name:
                     console.print(rename_contact([name, new_name], book))
+                    name = new_name
                 prompt("Press Enter to continue...")
             
             # Add Phone
