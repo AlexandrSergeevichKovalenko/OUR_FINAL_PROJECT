@@ -12,3 +12,4 @@ if __name__ == '__main__':
     finally:
         save_data(notebook, NOTEFILENAME)
         save_data(book, FILENAME)
+
