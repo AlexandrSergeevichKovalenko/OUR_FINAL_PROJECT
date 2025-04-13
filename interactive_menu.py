@@ -215,25 +215,31 @@ class InteractiveMenu:
                 new_name = self.prompt_input("Enter new Name (or 'cancel'): ")
                 if new_name:
                     console.print(rename_contact([name, new_name], book))
+                prompt("Press Enter to continue...")
+                                    
             elif sub_choice == '2':
                 new_phone = self.prompt_input("Enter new phone number (or 'cancel'): ")
                 if new_phone:
                     console.print(change_phone([name, "", new_phone], book))
+                prompt("Press Enter to continue...")                    
 
             elif sub_choice == '3':
                 new_email = self.prompt_input("Enter new email (or 'cancel'): ")
                 if new_email:
                     console.print(change_email([name, new_email], book))
+                prompt("Press Enter to continue...")
 
             elif sub_choice == '4':
                 new_address = self.prompt_input("Enter new address (or 'cancel'): ")
                 if new_address:
                     console.print(change_address([name, new_address], book))
+                prompt("Press Enter to continue...")
 
             elif sub_choice == '5':
                 new_birthday = self.prompt_input("Enter new birthday (DD.MM.YYYY) (or 'cancel'): ")
                 if new_birthday:
                     console.print(set_birthday([name, new_birthday], book))
+                prompt("Press Enter to continue...")
 
             # Remove Phone
             elif sub_choice in '6':
