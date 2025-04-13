@@ -4,6 +4,7 @@ import pickle
 from pathlib import Path
 
 
+# global variable(name of the file) for storaging all program progress
 FILENAME = Path("addressbook.pkl")
 NOTEFILENAME = Path("notebook.pkl")
 
