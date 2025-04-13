@@ -1,4 +1,9 @@
 from classes_for_program import Note
+from rich.console import Console
+from rich.panel import Panel
+
+
+console = Console()
 
 
 def add_note(book: Note):
@@ -28,7 +33,12 @@ def add_note(book: Note):
                 if tags:
                     record.add_tags(tags)
                 book.add_record(record)
-                return "Note added."
+                result = book.find(title)
+                return Panel.fit(
+                    f"[blue]Current note:[/]\n {result}",
+                    title=result.title,
+                    border_style="blue",
+                )
             else:
                 while True:
                     print("A note with this name already exists, do you want to replace it? (y/n)")
@@ -57,7 +67,8 @@ def change_note(book: Note):
         elif title:
             record = book.find(title)
             if record:
-                note = input("📜 Enter a new note: ").strip().lower()
+                console.print(Panel.fit(f"[blue]Current note:[/]\n {record}", title=record.title, border_style="blue"))
+                note = input("📜 Enter a new note: ").strip()
                 record.add_note(note)
                 return "Note changed."
             return "Note not found."
@@ -76,7 +87,10 @@ def show_note(book: Note) -> str:
             return "Back to main menu."
         elif title:
             record = book.find(title)
-            return f"📜 {record}" if record else "Note not found."
+            if record:
+                return Panel.fit(f"[blue]Current note:[/]\n {record}", title=record.title, border_style="blue")
+            else:
+                return "Note not found."
         print("Please enter a title.")
 
 
@@ -93,6 +107,7 @@ def remove_note(book, title: str =None):
         return "Title cannot be empty."
     record = book.find(title)
     if record:
+
         book.delete(title)
         return "Note removed."
     else:
