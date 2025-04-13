@@ -1,12 +1,8 @@
-from functions_block import load_data, save_data
+from functions_block import load_data, save_data, FILENAME, NOTEFILENAME
 from interactive_menu import InteractiveMenu
-from classes_for_program import NoteBook, Note
-from pathlib import Path
 
 
 # global variable(name of the file) for storaging all program progress
-FILENAME = Path("addressbook.pkl")
-NOTEFILENAME = Path("notebook.pkl")
 
 
 if __name__ == '__main__':

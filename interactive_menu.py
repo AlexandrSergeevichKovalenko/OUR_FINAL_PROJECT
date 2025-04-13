@@ -322,6 +322,8 @@ class InteractiveMenu:
                 if s_choice == '1':
                     search_notes = search_note("search-notes")
                     notes = search_notes(notebook)
+                    
+                    console.clear()
                     if notes:
                         for note in notes:
                             console.print(Panel.fit(str(note), border_style="#1E90FF"))
