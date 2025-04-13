@@ -54,7 +54,9 @@ class InteractiveMenu:
         console.clear()
         console.print(Panel("Add Contact", style="bold green"))
         name = self.prompt_input("Enter contact name (or type 'back' to go back): ")
-        if not name:
+        if name:
+            add_contact(name, book)
+        else:
             return
         while True:
             console.clear()
@@ -65,7 +67,7 @@ class InteractiveMenu:
             elif sub_choice == '1':
                 phone = self.prompt_input("Enter phone number (10 digits) (or 'back'): ")
                 if phone:
-                    console.print(add_contact([name, phone], book))
+                    console.print(add_phone([name, phone], book))
             elif sub_choice == '2':
                 email = self.prompt_input("Enter email (or 'back'): ")
                 if email:
