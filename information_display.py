@@ -77,9 +77,9 @@ display_search_notes_menu = (
         )
 
 display_help = (
-            "Contacts:\n"
+            "Manage Contacts:\n"
             "  - Add, Change, Show, Remove contacts; manage phone, email, address, birthday.\n\n"
-            "Notes:\n"
+            "Manage Notes:\n"
             "  - Add, Change, Show, Remove notes; add tags; search by tag, title, content.\n\n"
             "Search:\n"
             "  - Search Contacts by name, phone, email, address, birthday.\n"

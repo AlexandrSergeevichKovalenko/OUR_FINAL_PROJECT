@@ -1,4 +1,9 @@
 from classes_for_program import Note
+from rich.console import Console
+from rich.panel import Panel
+
+
+console = Console()
 
 
 def add_note(book: Note):
@@ -8,12 +13,12 @@ def add_note(book: Note):
     If a note with the same title exists, prompts to replace it.
     """
     while True:
-        title = input("✨ Enter a title or (back) to return to the main menu: ").strip().lower()
+        title = input("✨ Enter a title or (back) to return to the main menu: ")
         if title == "back":
             return "Back to main menu"
         elif title:
-            note = input("📜 Enter a note: ").strip().lower()
-            tags = input("🏷️ Enter tags or (n): ").strip().lower()
+            note = input("📜 Enter a note: ")
+            tags = input("🏷️ Enter tags or (n): ")
 
             if tags != "n":
                 tags = tags.split(",")
@@ -28,7 +33,12 @@ def add_note(book: Note):
                 if tags:
                     record.add_tags(tags)
                 book.add_record(record)
-                return "Note added."
+                result = book.find(title)
+                return Panel.fit(
+                    f"{result}",
+                    title="Note added",
+                    border_style="blue",
+                )
             else:
                 while True:
                     print("A note with this name already exists, do you want to replace it? (y/n)")
@@ -51,13 +61,14 @@ def change_note(book: Note):
     If the note does not exist, returns a failure message.
     """
     while True:
-        title = input("✨ Enter a title or (back) to return to the main menu: ").strip().lower()
+        title = input("✨ Enter a title or (back) to return to the main menu: ")
         if title == "back":
             return "Back to main menu."
         elif title:
             record = book.find(title)
             if record:
-                note = input("📜 Enter a new note: ").strip().lower()
+                console.print(Panel.fit(f"{record}", title="Current note", border_style="blue"))
+                note = input("📜 Enter a new note: ")
                 record.add_note(note)
                 return "Note changed."
             return "Note not found."
@@ -71,12 +82,15 @@ def show_note(book: Note) -> str:
     If the note does not exist, returns a failure message.
     """
     while True:
-        title = input("✨ Enter a title or (back) to return to the main menu: ").strip().lower()
+        title = input("✨ Enter a title or (back) to return to the main menu: ")
         if title == "back":
             return "Back to main menu."
         elif title:
             record = book.find(title)
-            return f"📜 {record}" if record else "Note not found."
+            if record:
+                return Panel.fit(f"{record}", title=title, border_style="blue")
+            else:
+                return "Note not found."
         print("Please enter a title.")
 
 
@@ -86,13 +100,14 @@ def remove_note(book, title: str =None):
     If 'title' is provided, it is used directly; otherwise, the user is prompted.
     """
     if title is None:
-        title = input("✨ Enter a title to remove or (back) to return to the main menu: ").strip().lower()
+        title = input("✨ Enter a title to remove or (back) to return to the main menu: ")
     if title == "cancel":
         return "Back to main menu."
     if not title:
         return "Title cannot be empty."
     record = book.find(title)
     if record:
+
         book.delete(title)
         return "Note removed."
     else:
@@ -107,13 +122,13 @@ def search_note(command: str) -> callable:
     """
     COMMANDS = {
         "search-notes" : lambda: input(f"🔍 Enter words to search for:")
-        ,"search-by-tags-and-sort-by-title" : lambda: input(f"🏷️ Enter tags to sort by:").lower()
+        ,"search-by-tags-and-sort-by-title" : lambda: input(f"🏷️ Enter tags to sort by:")
     }
 
 
     def inner(book: Note) -> str:
         if book:
-            input_text = COMMANDS[command]().strip().lower()
+            input_text = COMMANDS[command]()
             STR = {
                 "search-by-tags-and-sort-by-title": lambda : book.search_by_tags_and_sort_by_title(input_text)
                 ,"search-notes": lambda : book.search_notes(input_text)
