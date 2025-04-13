@@ -27,13 +27,13 @@ def add_contact(args, book: AddressBook):
     return message
 
 
-@input_error(expected_arg_count=3)
-def change_phone(args, book: AddressBook):
-    name, old_number, new_number, *_ = args
+@input_error(expected_arg_count=2)
+def add_phone(args, book: AddressBook):
+    name, phone_number, *_ = args
     record = book.find(name)
     if record:
-        record.edit_phone(old_number, new_number)
-        return "Contact updated."
+        record.add_phone(phone_number)
+        return f"Phone number: {phone_number} added to contact: {name}"
     else:
         return f"There is no person with {name} name"
 
@@ -43,8 +43,10 @@ def remove_phone(args, book: AddressBook):
     name, r_number, *_ = args
     record = book.find(name)
     if record:
-        record.remove_phone(r_number)
-        return f"Phone {r_number} removed."
+        if record.remove_phone(r_number):
+            return f"Phone {r_number} removed."
+        else: 
+            return f"Phone {r_number} not found!"
     else:
         return f"There is no person with {name} name"    
       
@@ -170,8 +172,7 @@ def add_email(args, book: AddressBook):
     name, email_address, *_ = args
     record = book.find(name)
     if record is None:
-        record = Record(name)
-        book.add_record(record)
+        return f"No found contact '{name}'."
     record.add_email(email_address)
     return "Email added/updated."
 
@@ -184,8 +185,8 @@ def change_email(args, book: AddressBook):
     """
     name, new_email, *_ = args
     record = book.find(name)
-    if record is None or not record.email:
-        return f"No existing email found for contact '{name}'. Use 'add-email' to add an email."
+    if record is None:
+        return f"No found contact '{name}'."
     record.edit_email(new_email)
     return "Email updated."
 
@@ -198,8 +199,8 @@ def show_email(args, book: AddressBook):
     """
     name, *_ = args
     record = book.find(name)
-    if record is None or not record.email:
-        return f"No email found for contact '{name}'."
+    if record is None:
+        return f"No found contact '{name}'."
     return f"{name}'s email: {record.email.value}"
 
 
@@ -248,8 +249,8 @@ def change_address(args, book: AddressBook):
     new_address = " ".join(args[1:])
 
     record = book.find(name)
-    if record is None or not record.address:
-        return f"No existing address found for contact '{name}'. Use 'add-address' to add an address."
+    if record is None:
+        return f"No found contact '{name}'."
     record.edit_address(new_address)
     return "Address updated."
 

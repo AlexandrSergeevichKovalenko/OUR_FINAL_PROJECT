@@ -139,7 +139,11 @@ class Record:
 
     def remove_phone(self, phone_number: str):
         """Remove an existing phone number from the contact."""
-        self.phones = [phone for phone in self.phones if phone.value !=phone_number]
+        if phone_number not in [phone.value for phone in self.phones]:
+            return False
+        else: 
+            self.phones = [phone for phone in self.phones if phone.value !=phone_number]
+            return True
 
 
     def edit_phone(self, old_number: str, new_number: str):

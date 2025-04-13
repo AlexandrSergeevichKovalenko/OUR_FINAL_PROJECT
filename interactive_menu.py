@@ -3,7 +3,7 @@ from rich.console import Console
 from rich.panel import Panel
 from classes_for_program import Note
 from functions_block import (
-    add_contact, change_phone, remove_contact, show_all, set_birthday,
+    add_contact, add_phone, remove_contact, show_all, set_birthday,
     birthdays, add_email, change_email, add_address, change_address, save_data,
     search_records, rename_contact, remove_phone, remove_email, remove_address, 
     remove_birthday
@@ -99,13 +99,11 @@ class InteractiveMenu:
                     console.print(rename_contact([name, new_name], book))
                 prompt("Press Enter to continue...")
             
-            # Change Phone
+            # Add Phone
             elif sub_choice == '2':
-                
-                old_phone = self.prompt_input("Enter phone number to change (or 'cancel'): ")
-                new_phone = self.prompt_input("Enter new phone number (or 'cancel'): ")
-                if new_phone:
-                    console.print(change_phone([name, old_phone, new_phone], book))
+                phone = self.prompt_input("Enter phone number (or 'cancel'): ")
+                if phone:
+                    console.print(add_phone([name, phone], book))
                 prompt("Press Enter to continue...")                    
 
             # Change Email
