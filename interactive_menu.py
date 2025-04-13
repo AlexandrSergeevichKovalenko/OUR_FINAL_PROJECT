@@ -376,7 +376,6 @@ class InteractiveMenu:
                     console.print(Panel(f"Search contacts by string - {query}", style="bold green"))
                     show_search_result(search_records([query], book))
                     pause()                                
-
             elif choice == '2':
                 console.clear()
                 s_choice = self.display(di.display_search_notes_menu, "Search Notes")
