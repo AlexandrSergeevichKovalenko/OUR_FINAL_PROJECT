@@ -117,13 +117,9 @@ class Record:
         phone = Phone(phone_number)
         self.phones.append(phone)
 
-    # !!!
-    # I don't see any use of this method
-    # !!!
     def remove_phone(self, phone_number: str):
         """Remove an existing phone number from the contact."""
         self.phones = [phone for phone in self.phones if phone.value !=phone_number]
-
 
     def edit_phone(self, old_number: str, new_number: str):
         """Replace old phone with a new phone number."""
@@ -169,12 +165,28 @@ class Record:
         self.address = None
 
     def __str__(self):
+        # Birthday
         birthday_str = self.birthday.value.strftime("%d.%m.%Y") if self.birthday else "N/A"
-        phones_string = '; '.join(p.value for p in self.phones)
+        # Email
         email_str = self.email.value if self.email else "N/A"
+        # Address
         address_str = self.address.value if self.address else "N/A"
-        return (f"Contact name: {self.name.value}, phones: {phones_string}, "
-                f"birthday: {birthday_str}, email: {email_str}, address: {address_str}")
+        # Phones
+        phones_str = ", ".join(p.value for p in self.phones) if self.phones else "N/A"
+
+        contact_info = (
+                "[bold cyan]Name:[/] "
+                f"{self.name.value}\n"
+                "[bold yellow]Phones:[/] "
+                f"{phones_str}\n"
+                "[bold magenta]Birthday:[/] "
+                f"{birthday_str}\n"
+                "[bold green]Email:[/] "
+                f"{email_str}\n"
+                "[bold blue]Address:[/] "
+                f"{address_str}"
+        )
+        return contact_info
 
 
 class AddressBook(UserDict):
