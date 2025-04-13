@@ -63,15 +63,19 @@ def change_note(book: Note):
     while True:
         title = input("✨ Enter a title or (back) to return to the main menu: ")
         if title == "back":
-            return "Back to main menu."
+            console.print("Back to main menu.")
+            break
         elif title:
             record = book.find(title)
             if record:
                 console.print(Panel.fit(f"{record}", title="Current note", border_style="blue"))
                 note = input("📜 Enter a new note: ")
                 record.add_note(note)
-                return "Note changed."
-            return "Note not found."
+                console.clear()
+                console.print(Panel.fit(f"{record}", title="Note changed", border_style="blue"))
+                return
+            console.print("Note not found.")
+            return
         print("Please enter a title.")
 
 
@@ -94,24 +98,23 @@ def show_note(book: Note) -> str:
         print("Please enter a title.")
 
 
-def remove_note(book, title: str =None):
+def remove_note(book):
     """
     Remove a note from the notebook.
     If 'title' is provided, it is used directly; otherwise, the user is prompted.
     """
-    if title is None:
+    while True:
         title = input("✨ Enter a title to remove or (back) to return to the main menu: ")
-    if title == "cancel":
-        return "Back to main menu."
-    if not title:
-        return "Title cannot be empty."
-    record = book.find(title)
-    if record:
-
-        book.delete(title)
-        return "Note removed."
-    else:
-        return "Note not found."
+        if title:
+            if title == "back":
+                return "Back to main menu."
+            record = book.find(title)
+            if record:
+                book.delete(title)
+                return "Note removed."
+            else:
+                return "Note not found."
+        console.print("Title cannot be empty.", style="bold red")
 
 
 def search_note(command: str) -> callable:

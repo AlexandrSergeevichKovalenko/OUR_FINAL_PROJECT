@@ -268,30 +268,30 @@ class InteractiveMenu:
                 console.print(Panel("Add Note", style="bold green"))
                 self.print_note_titles(notebook)
                 console.print(add_note(notebook))
-                prompt("Press Enter to continue...")
+                pause()
 
             elif choice == '2':
                 console.clear()
                 console.print(Panel("Change Note", style="bold green"))
                 self.print_note_titles(notebook)
+                change_note(notebook)
 
-                console.print(change_note(notebook))
                 pause()
             elif choice == '3':
                 console.clear()
                 console.print(Panel("Show Note", style="bold green"))
                 self.print_note_titles(notebook)
-
                 console.print(show_note(notebook))
                 pause()
             elif choice == '4':
                 console.clear()
                 console.print(Panel("Show All Notes", style="bold green"))
-                console.print(str(notebook))
+                console.print(Panel(str(notebook), border_style="blue"))
                 pause()
             elif choice == '5':
                 console.clear()
                 console.print(Panel("Add Tags to Note", style="bold green"))
+                self.print_note_titles(notebook)
                 title = self.prompt_input("Enter note title (or 'back'): ")
                 if not title:
                     console.print("[bold red]Operation cancelled.[/bold red]")
@@ -314,8 +314,7 @@ class InteractiveMenu:
                 console.clear()
                 console.print(Panel("Remove Notes", style="bold green"))
                 self.print_note_titles(notebook)
-                title = self.prompt_input("Enter note title to remove (or 'back'): ")
-                console.print(remove_note(notebook, title))
+                console.print(remove_note(notebook))
                 pause()
             else:
                 console.print("[bold red]Invalid option in Notes Menu.[/bold red]")
