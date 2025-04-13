@@ -32,7 +32,7 @@ def change_phone(args,  book: AddressBook):
     name, old_number, new_number, *_ = args.split(",")
     record = book.find(name)
     if record:
-        record.edit_phone(old_number.split(), new_number.split())
+        record.edit_phone(old_number.strip(), new_number.strip())
         return "Contact updated."
     else:
         return f"There is no person with {name} name"
