@@ -2,9 +2,6 @@ from functions_block import load_data, save_data, FILENAME, NOTEFILENAME
 from interactive_menu import InteractiveMenu
 
 
-# global variable(name of the file) for storaging all program progress
-
-
 if __name__ == '__main__':
     book = load_data(FILENAME)
     notebook = load_data(NOTEFILENAME)
@@ -15,7 +12,3 @@ if __name__ == '__main__':
     finally:
         save_data(book, FILENAME)
         save_data(notebook, NOTEFILENAME)
-        
-
-
-
