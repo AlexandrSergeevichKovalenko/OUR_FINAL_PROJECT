@@ -1,7 +1,7 @@
 from classes_for_program import Note
 
 
-def add_note(book):
+def add_note(book: Note):
     """
     Add a new note to the notebook.
     Prompts for title, note content, and optional tags.
@@ -43,7 +43,7 @@ def add_note(book):
         print("Title cannot be empty. Please try again.")
 
 
-def change_note(book):
+def change_note(book: Note):
     """
     Change the content of an existing note.
     Offers to edit the content of the note.
@@ -64,7 +64,7 @@ def change_note(book):
         print("Please enter a title.")
 
 
-def show_note(book):
+def show_note(book: Note) -> str: 
     """
     Display the content of a specific note.
     If the note exists, returns its content.
@@ -80,16 +80,7 @@ def show_note(book):
         print("Please enter a title.")
 
 
-def show_all_notes(book):
-    """
-    Display all notes in the notebook.
-    If the notebook is empty, returns a message indicating so.
-    """
-    result = str(book) if book else "NoteBook is empty"
-    return result
-
-
-def remove_note(book, title=None):
+def remove_note(book, title: str =None):
     """
     Remove a note from the notebook.
     If 'title' is provided, it is used directly; otherwise, the user is prompted.
@@ -108,7 +99,7 @@ def remove_note(book, title=None):
         return "Note not found."
 
 
-def search_note(command):
+def search_note(command: str) -> callable:
     """
     Sort notes by tags or search for a specific word in the notes by title, note, tags.
     If the notebook is empty, returns a message indicating so.
@@ -120,7 +111,7 @@ def search_note(command):
     }
 
 
-    def inner(book):
+    def inner(book: Note) -> str:
         if book:
             input_text = COMMANDS[command]().strip().lower()
             STR = {
