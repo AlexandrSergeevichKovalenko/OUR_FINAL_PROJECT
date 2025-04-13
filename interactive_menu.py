@@ -9,7 +9,7 @@ from functions_block import (
     remove_birthday
 )
 from note_functions import (
-    change_note, show_note, show_all_notes, remove_note, search_note
+    change_note, show_note, remove_note, search_note
 )
 import information_display as di
 from animation import display_animals

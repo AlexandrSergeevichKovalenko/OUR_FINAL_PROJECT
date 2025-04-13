@@ -8,7 +8,7 @@ console = Console()
 animals_emojis = ["🐎", "🦇", "🐇", "🐿️", "🦨", "🐦", "🐫", "🦣", "🐘", "🦒", "🐑", "🐖", "🐄", "🐐", "🧚"]
 
 
-def display_animals(path_length: int = 40, animals_count: int = 10, animal_spacing: int = 4, speed: int = 30, emojis: list = animals_emojis):
+def display_animals(path_length: int = 40, animals_count: int = 10, animal_spacing: int = 4, speed: int = 40, emojis: list = animals_emojis):
     """
     Display a fixed set of animals moving right to left across the console.
     """
