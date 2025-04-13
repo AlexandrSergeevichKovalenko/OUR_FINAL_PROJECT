@@ -8,12 +8,12 @@ def add_note(book: Note):
     If a note with the same title exists, prompts to replace it.
     """
     while True:
-        title = input("✨ Enter a title or (back) to return to the main menu: ").strip().lower()
+        title = input("✨ Enter a title or (back) to return to the main menu: ").strip()
         if title == "back":
             return "Back to main menu"
         elif title:
-            note = input("📜 Enter a note: ").strip().lower()
-            tags = input("🏷️ Enter tags or (n): ").strip().lower()
+            note = input("📜 Enter a note: ").strip()
+            tags = input("🏷️ Enter tags or (n): ").strip()
 
             if tags != "n":
                 tags = tags.split(",")
@@ -51,7 +51,7 @@ def change_note(book: Note):
     If the note does not exist, returns a failure message.
     """
     while True:
-        title = input("✨ Enter a title or (back) to return to the main menu: ").strip().lower()
+        title = input("✨ Enter a title or (back) to return to the main menu: ").strip()
         if title == "back":
             return "Back to main menu."
         elif title:
@@ -71,7 +71,7 @@ def show_note(book: Note) -> str:
     If the note does not exist, returns a failure message.
     """
     while True:
-        title = input("✨ Enter a title or (back) to return to the main menu: ").strip().lower()
+        title = input("✨ Enter a title or (back) to return to the main menu: ").strip()
         if title == "back":
             return "Back to main menu."
         elif title:
@@ -86,7 +86,7 @@ def remove_note(book, title: str =None):
     If 'title' is provided, it is used directly; otherwise, the user is prompted.
     """
     if title is None:
-        title = input("✨ Enter a title to remove or (back) to return to the main menu: ").strip().lower()
+        title = input("✨ Enter a title to remove or (back) to return to the main menu: ").strip()
     if title == "cancel":
         return "Back to main menu."
     if not title:
@@ -107,13 +107,13 @@ def search_note(command: str) -> callable:
     """
     COMMANDS = {
         "search-notes" : lambda: input(f"🔍 Enter words to search for:")
-        ,"search-by-tags-and-sort-by-title" : lambda: input(f"🏷️ Enter tags to sort by:").lower()
+        ,"search-by-tags-and-sort-by-title" : lambda: input(f"🏷️ Enter tags to sort by:")
     }
 
 
     def inner(book: Note) -> str:
         if book:
-            input_text = COMMANDS[command]().strip().lower()
+            input_text = COMMANDS[command]().strip()
             STR = {
                 "search-by-tags-and-sort-by-title": lambda : book.search_by_tags_and_sort_by_title(input_text)
                 ,"search-notes": lambda : book.search_notes(input_text)

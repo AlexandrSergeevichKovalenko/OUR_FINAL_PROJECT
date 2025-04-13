@@ -28,7 +28,7 @@ def add_contact(args, book: AddressBook):
 
 
 @input_error(expected_arg_count=3)
-def change_phone(args, book: AddressBook):
+def change_phone(args,  book: AddressBook):
     name, old_number, new_number, *_ = args
     record = book.find(name)
     if record:
