@@ -1,6 +1,7 @@
 from collections import UserDict
 from datetime import datetime, date, timedelta
 import re
+from rich.panel import Panel
 
 
 # ========================= BASE FIELD AND ITS SUBCLASSES ==========================
@@ -371,6 +372,13 @@ class NoteBook(UserDict):
     Supports:
     - 'add', 'find', 'delete notes', 'search notes' and 'search by tags and sort by title'
     """
+
+    def get_titles(self):
+        """Display the title of the note."""
+        titles = []
+        for note in self.data.values():
+            titles.append(note.title)
+        return titles
 
 
     def add_record(self, note: Note):

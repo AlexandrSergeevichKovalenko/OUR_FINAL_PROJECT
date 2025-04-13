@@ -9,7 +9,7 @@ from functions_block import (
     remove_birthday
 )
 from note_functions import (
-    change_note, show_note, remove_note, search_note
+    change_note, show_note, remove_note, search_note, add_note
 )
 import information_display as di
 from animation import display_animals
@@ -224,52 +224,40 @@ class InteractiveMenu:
 
 
     # =========================== Notes Handling ===========================
+
+
+    def print_note_titles(self, notebook):
+        titles = notebook.get_titles()
+        if titles:
+            console.print(Panel.fit(f"{", ".join(titles)}", title="All titles", border_style="blue"))
+        else:
+            console.print("[bold red]No notes available.[/bold red]")
+
+
+
     def handle_notes(self, notebook):
         while True:
-            console.clear()
             choice = self.display(di.display_notes_menu, "Manage Notes")
             if choice == '7':  # Back to Main Menu
                 break
             elif choice == '1':
                 console.clear()
                 console.print(Panel("Add Note", style="bold green"))
-                title = self.prompt_input("Enter note title (or 'cancel'): ")
-                if not title:
-                    prompt("Press Enter to continue...")
-                    continue
-                note_text = self.prompt_input("Enter the note text (or 'cancel'): ")
-                if note_text is None:
-                    console.print("[bold red]Note creation cancelled.[/bold red]")
-                    prompt("Press Enter to continue...")
-                    continue
-                add_tags_answer = self.prompt_input("Would you like to add tags? (y/n or 'cancel'): ")
-                if add_tags_answer and add_tags_answer.lower() == "y":
-                    tags_input = self.prompt_input("Enter tags (comma-separated) (or just Enter for none): ")
-                    if tags_input is None:
-                        console.print("[bold red]Tag entry cancelled. No tags added.[/bold red]")
-                        tags = []
-                    elif not tags_input.strip():
-                        tags = []
-                    else:
-                        tags = tags_input.split(",")
-                else:
-                    tags = []
-                new_note = notebook.find(title)
-                if not new_note:
-                    new_note = Note(title)
-                    notebook.add_record(new_note)
-                new_note.add_note(note_text)
-                new_note.add_tags(tags)
-                console.print(f"[bold green]Note '{title}' added/updated successfully![/bold green]")
+                self.print_note_titles(notebook)
+                console.print(add_note(notebook))
                 prompt("Press Enter to continue...")
             elif choice == '2':
                 console.clear()
                 console.print(Panel("Change Note", style="bold green"))
+                self.print_note_titles(notebook)
+
                 console.print(change_note(notebook))
                 prompt("Press Enter to continue...")
             elif choice == '3':
                 console.clear()
                 console.print(Panel("Show Note", style="bold green"))
+                self.print_note_titles(notebook)
+
                 console.print(show_note(notebook))
                 prompt("Press Enter to continue...")
             elif choice == '4':
@@ -300,6 +288,9 @@ class InteractiveMenu:
                 prompt("Press Enter to continue...")
             elif choice == '6':
                 console.clear()
+                console.print(Panel("Remove Notes", style="bold green"))
+                self.print_note_titles(notebook)
+                
                 title = self.prompt_input("Enter note title to remove (or 'cancel'): ")
                 console.print(remove_note(notebook, title))
                 prompt("Press Enter to continue...")
