@@ -1,10 +1,18 @@
 from decor import input_error
-from classes_for_program import *
+from classes_for_program import NoteBook, AddressBook, Record
 import pickle
+from pathlib import Path
+
+
+FILENAME = Path("addressbook.pkl")
+NOTEFILENAME = Path("notebook.pkl")
+
 
 """
 Here are functions whose names clearly matches their logic.
 """
+
+
 @input_error(expected_arg_count=2)
 def add_contact(args, book: AddressBook):
     name, phone, *_ = args
@@ -18,6 +26,7 @@ def add_contact(args, book: AddressBook):
         record.add_phone(phone)
     return message
 
+
 @input_error(expected_arg_count=3)
 def change_phone(args, book: AddressBook):
     name, old_number, new_number, *_ = args
@@ -27,6 +36,7 @@ def change_phone(args, book: AddressBook):
         return "Contact updated."
     else:
         return f"There is no person with {name} name"
+
 
 @input_error(expected_arg_count=2)
 def remove_phone(args, book: AddressBook):
@@ -38,6 +48,7 @@ def remove_phone(args, book: AddressBook):
     else:
         return f"There is no person with {name} name"    
       
+
 @input_error(expected_arg_count=1)
 def remove_contact(args, book: AddressBook):
     """
@@ -51,7 +62,7 @@ def remove_contact(args, book: AddressBook):
     book.delete(name)
     return f"Contact '{name}' removed."
     
-# @input_error(expected_arg_count=2)
+
 def rename_contact(args, book: AddressBook):
     """
     Function for change name of contact'.
@@ -70,11 +81,13 @@ def rename_contact(args, book: AddressBook):
         else:
             return f"Contact with name: {new_name} not found"
 
+
 def show_all(book: AddressBook):
     if len(book.data) != 0:
         return str(book)
     else:
         return "There is no data to output."
+
 
 @input_error(expected_arg_count=1)
 def search_records(args, book: AddressBook):
@@ -95,8 +108,8 @@ def search_records(args, book: AddressBook):
             records.append(v)          
     return records       
     
-@input_error(expected_arg_count=2)
 
+@input_error(expected_arg_count=2)
 def set_birthday(args, book):
     name, birthday_day, *_ = args
     message = "Birthday is set."
@@ -119,7 +132,8 @@ def set_birthday(args, book):
         return message
     except ValueError as e:
         return str(e)
-    
+ 
+   
 @input_error(expected_arg_count=0)
 def remove_birthday(args, book: AddressBook):
     """
@@ -133,6 +147,7 @@ def remove_birthday(args, book: AddressBook):
     record.remove_birthday()
     return f"Birthday of contact:{name} removed."
 
+
 @input_error(expected_arg_count=1)
 def show_birthday(args, book):
     name, *_ = args
@@ -144,7 +159,8 @@ def show_birthday(args, book):
             return f"{name}'s birthday is on {record.birthday.value.strftime('%d.%m.%Y')}"
         else:
             return f"{name} does not have a birthday set."
-        
+
+
 @input_error(expected_arg_count=2)
 def add_email(args, book: AddressBook):
     """
@@ -186,6 +202,7 @@ def show_email(args, book: AddressBook):
         return f"No email found for contact '{name}'."
     return f"{name}'s email: {record.email.value}"
 
+
 @input_error(expected_arg_count=1)
 def remove_email(args, book: AddressBook):
     """
@@ -198,6 +215,7 @@ def remove_email(args, book: AddressBook):
         return f"No email to remove for contact '{name}'."
     record.remove_email()
     return f"Email of contact:{name} removed."
+
 
 @input_error(expected_arg_count=2)
 def add_address(args, book: AddressBook):
@@ -217,6 +235,7 @@ def add_address(args, book: AddressBook):
     record.add_address(address)
     return "Address added/updated."
 
+
 @input_error(expected_arg_count=2)
 def change_address(args, book: AddressBook):
     """
@@ -234,6 +253,7 @@ def change_address(args, book: AddressBook):
     record.edit_address(new_address)
     return "Address updated."
 
+
 @input_error(expected_arg_count=1)
 def show_address(args, book: AddressBook):
     """
@@ -245,6 +265,7 @@ def show_address(args, book: AddressBook):
     if record is None or not record.address:
         return f"No address found for contact '{name}'."
     return f"{name}'s address: {record.address.value}"
+
 
 @input_error(expected_arg_count=1)
 def remove_address(args, book: AddressBook):
@@ -258,6 +279,7 @@ def remove_address(args, book: AddressBook):
         return f"No address to remove for contact '{name}'."
     record.remove_address()
     return f"Address of contact {name} removed."
+
 
 # forming a string of names of the persons, who should be congratulated and their respective birthday dates.
 def birthdays(book, args):
@@ -278,6 +300,7 @@ def birthdays(book, args):
 def save_data(book, filename):
     with open(filename, "wb") as record_file:
         pickle.dump(book, record_file)
+
 
 #loading book from file or creating a new book instance if there is no file
 def load_data(filename):

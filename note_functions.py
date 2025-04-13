@@ -1,11 +1,7 @@
-from classes_for_program import *
-from rich.panel import Panel
-from rich.text import Text
-from rich.console import Console
+from classes_for_program import Note
 
-console = Console()
 
-def add_note(book):
+def add_note(book: Note):
     """
     Add a new note to the notebook.
     Prompts for title, note content, and optional tags.
@@ -46,7 +42,8 @@ def add_note(book):
                         return "Note not changed."
         print("Title cannot be empty. Please try again.")
 
-def change_note(book):
+
+def change_note(book: Note):
     """
     Change the content of an existing note.
     Offers to edit the content of the note.
@@ -66,7 +63,8 @@ def change_note(book):
             return "Note not found."
         print("Please enter a title.")
 
-def show_note(book):
+
+def show_note(book: Note) -> str: 
     """
     Display the content of a specific note.
     If the note exists, returns its content.
@@ -81,20 +79,14 @@ def show_note(book):
             return f"📜 {record}" if record else "Note not found."
         print("Please enter a title.")
 
-def show_all_notes(book):
-    """
-    Display all notes in the notebook.
-    If the notebook is empty, returns a message indicating so.
-    """
-    return str(book) if book else "NoteBook is empty"
 
-def remove_note(book, title=None):
+def remove_note(book, title: str =None):
     """
     Remove a note from the notebook.
     If 'title' is provided, it is used directly; otherwise, the user is prompted.
     """
     if title is None:
-        title = input("✨ Enter a title to remove (or type 'cancel' to return to the main menu): ").strip().lower()
+        title = input("✨ Enter a title to remove or (back) to return to the main menu: ").strip().lower()
     if title == "cancel":
         return "Back to main menu."
     if not title:
@@ -106,7 +98,8 @@ def remove_note(book, title=None):
     else:
         return "Note not found."
 
-def search_note(command):
+
+def search_note(command: str) -> callable:
     """
     Sort notes by tags or search for a specific word in the notes by title, note, tags.
     If the notebook is empty, returns a message indicating so.
@@ -116,21 +109,20 @@ def search_note(command):
         "search-notes" : lambda: input(f"🔍 Enter words to search for:")
         ,"search-by-tags-and-sort-by-title" : lambda: input(f"🏷️ Enter tags to sort by:").lower()
     }
-    def inner(book):
+
+
+    def inner(book: Note) -> str:
         if book:
             input_text = COMMANDS[command]().strip().lower()
             STR = {
                 "search-by-tags-and-sort-by-title": lambda : book.search_by_tags_and_sort_by_title(input_text)
                 ,"search-notes": lambda : book.search_notes(input_text)
             }   
-            sorted_note = STR[command]()
-            if sorted_note:
-                print("--" * 50)
-                for note in sorted_note:
-                    console.print(Panel.fit(str(note), border_style="#1E90FF"))  # note має повертати Rich Text або Text object
-                print("--" * 50)
+            sorted_notes = STR[command]()
+            if sorted_notes:
+                return sorted_notes
             else:
-                console.print("No notes found.")
+                return None
         else:
-            console.print("NoteBook is empty.")
+            return None
     return inner
