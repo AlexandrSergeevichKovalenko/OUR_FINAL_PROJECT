@@ -76,7 +76,7 @@ def show_note(book: Note) -> str:
             return "Back to main menu."
         elif title:
             record = book.find(title)
-            return f"📜 {record}" if record else "Note not found."
+            return f"{record}" if record else "Note not found."
         print("Please enter a title.")
 
 
