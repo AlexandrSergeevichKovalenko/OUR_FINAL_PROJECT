@@ -140,7 +140,11 @@ class Record:
 
     def remove_phone(self, phone_number: str):
         """Remove an existing phone number from the contact."""
-        self.phones = [phone for phone in self.phones if phone.value !=phone_number]
+        if phone_number not in [phone.value for phone in self.phones]:
+            return False
+        else: 
+            self.phones = [phone for phone in self.phones if phone.value !=phone_number]
+            return True
 
 
     def edit_phone(self, old_number: str, new_number: str):
@@ -196,24 +200,24 @@ class Record:
 
     def __str__(self):
         # Birthday
-        birthday_str = self.birthday.value.strftime("%d.%m.%Y") if self.birthday else "N/A"
+        birthday_str = self.birthday.value.strftime("%d.%m.%Y") if self.birthday else "—"
         # Email
-        email_str = self.email.value if self.email else "N/A"
+        email_str = self.email.value if self.email else "—"
         # Address
-        address_str = self.address.value if self.address else "N/A"
+        address_str = self.address.value if self.address else "—"
         # Phones
-        phones_str = ", ".join(p.value for p in self.phones) if self.phones else "N/A"
+        phones_str = ", ".join(p.value for p in self.phones) if self.phones else "—"
 
         contact_info = (
-                "[bold cyan]Name:[/] "
+                "[bold magenta]Name:[/] "
                 f"{self.name.value}\n"
-                "[bold yellow]Phones:[/] "
+                "[bold magenta]Phones:[/] "
                 f"{phones_str}\n"
                 "[bold magenta]Birthday:[/] "
                 f"{birthday_str}\n"
-                "[bold green]Email:[/] "
+                "[bold magenta]Email:[/] "
                 f"{email_str}\n"
-                "[bold blue]Address:[/] "
+                "[bold magenta]Address:[/] "
                 f"{address_str}"
         )
         return contact_info
@@ -287,40 +291,10 @@ class AddressBook(UserDict):
                     upcoming_birthdays.append({"name": user, "birthday": AddressBook.date_to_string(congratulation_date)})
         return upcoming_birthdays
 
-
     def __str__(self):
-        """
-        Returns a formatted string with all contacts' data,
-        highlighting fields with Rich markup.
-        """
         if not self.data:
-            return "[bold red]No contacts found.[/bold red]"
-
-        output = []
-        for record in self.data.values():
-            # Phones
-            phones_str = ", ".join(p.value for p in record.phones) if record.phones else "N/A"
-            # Birthday
-            birthday_str = record.birthday.value.strftime("%d.%m.%Y") if record.birthday else "N/A"
-            # Email
-            email_str = record.email.value if record.email else "N/A"
-            # Address
-            address_str = record.address.value if record.address else "N/A"
-
-            contact_info = (
-                "[bold cyan]Name:[/] "
-                f"{record.name.value}\n"
-                "[bold yellow]Phones:[/] "
-                f"{phones_str}\n"
-                "[bold magenta]Birthday:[/] "
-                f"{birthday_str}\n"
-                "[bold green]Email:[/] "
-                f"{email_str}\n"
-                "[bold blue]Address:[/] "
-                f"{address_str}"
-            )
-            output.append(contact_info)
-        return "\n\n" + "\n\n".join(output)
+            return "No contacts found."
+        return "\n".join(self.data.keys())
 
 
 # =========================== Note AND NoteBook ===========================
