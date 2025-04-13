@@ -410,7 +410,7 @@ class InteractiveMenu:
             elif choice == '1':
                 query = self.prompt_input("Enter search query for contacts (or 'cancel'): ")
                 console.print(Panel(f"Search contacts by string - {query}", style="bold green"))
-                show_search_result(search_records(query, book))
+                show_search_result(search_records([query], book))
                 prompt("Press Enter to continue...")                
 #                console.clear()
 #                s_choice = self.display_search_contacts_menu()
