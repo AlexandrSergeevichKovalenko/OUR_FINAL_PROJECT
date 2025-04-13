@@ -28,11 +28,11 @@ def add_contact(args, book: AddressBook):
 
 
 @input_error(expected_arg_count=3)
-def change_phone(args, book: AddressBook):
-    name, old_number, new_number, *_ = args
+def change_phone(args,  book: AddressBook):
+    name, old_number, new_number, *_ = args.split(",")
     record = book.find(name)
     if record:
-        record.edit_phone(old_number, new_number)
+        record.edit_phone(old_number.split(), new_number.split())
         return "Contact updated."
     else:
         return f"There is no person with {name} name"
