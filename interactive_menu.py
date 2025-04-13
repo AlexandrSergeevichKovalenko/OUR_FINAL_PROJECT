@@ -82,78 +82,88 @@ class InteractiveMenu:
                 console.print("[bold red]Invalid option, please try again.[/bold red]")
             pause()
 
-
     def handle_change_contact(self, book):
         console.clear()
         console.print(Panel("Change Contact", style="bold green"))
         name = self.prompt_input("Enter the contact name to change (or 'back'): ")
+        if name is None:
+            return
         if not book.find(name):
-             console.print(Panel(f"Contact {name} not found!", style="bold green"))
-             pause()
-             return
+            console.print(Panel(f"Contact '{name}' not found!", style="bold green"))
+            pause()
+            return
+
         while True:
             console.clear()
-            console.print(Panel(f"{book.find(name)}", style="bold green"))            
-            sub_choice = self.display(di.display_change_contact_menu, "Add Contact", False)
 
+            record = book.find(name)
+            phones_str = ", ".join(p.value for p in record.phones) if record.phones else "—"
+            birthday_str = record.birthday.value.strftime("%d.%m.%Y") if record.birthday else "—"
+            email_str = record.email.value if record.email else "—"
+            address_str = record.address.value if record.address else "—"
+
+            content = (
+                f"[bold magenta]Name:[/] {record.name.value}\n"
+                f"[bold magenta]Phones:[/] {phones_str}\n"
+                f"[bold magenta]Birthday:[/] {birthday_str}\n"
+                f"[bold magenta]Email:[/] {email_str}\n"
+                f"[bold magenta]Address:[/] {address_str}"
+            )
+            panel = Panel.fit(content, border_style="#1E90FF")
+            console.print(panel)
+
+            sub_choice = self.display(di.display_change_contact_menu, "Change Contact", False)
             if sub_choice == '0':
                 break  # Back to Contacts Menu
-            elif sub_choice == '1':
+
+            result = None
+
+            if sub_choice == '1':
                 new_name = self.prompt_input("Enter new Name (or 'back'): ")
                 if new_name:
-                    console.print(rename_contact([name, new_name], book))
-                pause()
-            
-            # Add Phone
+                    result = rename_contact([name, new_name], book)
+                    name = new_name  # Обновляем переменную `name`, иначе дальше будет искать старое имя
+
             elif sub_choice == '2':
                 phone = self.prompt_input("Enter phone number (or 'back'): ")
                 if phone:
-                    console.print(add_phone([name, phone], book))
-                pause()                    
+                    result = add_phone([name, phone], book)
 
-            # Change Email
             elif sub_choice == '3':
                 new_email = self.prompt_input("Enter new email (or 'back'): ")
                 if new_email:
-                    console.print(change_email([name, new_email], book))
-                pause()
+                    result = change_email([name, new_email], book)
 
-            # Change Address
             elif sub_choice == '4':
                 new_address = self.prompt_input("Enter new address (or 'back'): ")
                 if new_address:
-                    console.print(change_address([name, new_address], book))
-                pause()
+                    result = change_address([name, new_address], book)
 
-            # Change Birthday
             elif sub_choice == '5':
                 new_birthday = self.prompt_input("Enter new birthday (DD.MM.YYYY) (or 'back'): ")
                 if new_birthday:
-                    console.print(set_birthday([name, new_birthday], book))
-                pause()
+                    result = set_birthday([name, new_birthday], book)
 
-            # Remove Phone
-            elif sub_choice in '6':
+            elif sub_choice == '6':
                 r_phone = self.prompt_input("Enter phone number to remove (or 'back'): ")
                 if r_phone:
-                    console.print(remove_phone([name, r_phone], book))
-                pause()
+                    result = remove_phone([name, r_phone], book)
 
-            # Remove Email
             elif sub_choice == '7':
-                console.print(remove_email([name], book))
-                pause()
+                result = remove_email([name], book)
 
-            # Remove Address
             elif sub_choice == '8':
-                console.print(remove_address([name], book))
-                pause()
+                result = remove_address([name], book)
 
-            # Remove Birthday
             elif sub_choice == '9':
-                console.print(remove_birthday([name, None], book))
-                pause()
+                result = remove_birthday([name, None], book)
 
+            else:
+                result = "[bold red]Invalid option.[/bold red]"
+
+            if result:
+                console.print(result)
+                pause()
 
     def handle_view_contact(self, book):
         console.clear()
@@ -163,9 +173,10 @@ class InteractiveMenu:
             record = book.find(name)
             if record:
                 console.print(Panel(str(record), title=f"Contact: {name}", border_style="#1E90FF"))
+                pause()
             else:
                 console.print(f"[bold red]Contact '{name}' not found.[/bold red]")
-        pause()
+                pause()
 
 
     def handle_delete_contact(self, book):
@@ -188,14 +199,13 @@ class InteractiveMenu:
         console.print(birthdays(book, ["7"]))
         pause()
 
-
     def handle_birthdays_x_days(self, book):
         console.clear()
         days = self.prompt_input("Enter the number of days to check birthdays (or 'back'): ")
         if days:
             console.print(Panel(f"Birthdays in next {days} days:", style="bold green"))
             console.print(birthdays(book, [days]))
-        pause()
+            pause()
 
 
     def handle_contacts(self, book):
@@ -325,12 +335,26 @@ class InteractiveMenu:
     # =========================== Search Handling ===========================
     def handle_search(self, book, notebook):
         def show_search_result(result: list):
-            if result: 
-                for i in result:
-                    console.print(f'{i}')
-                    console.print('\n')
+            if result:
+                for record in result:
+                    phones_str = ", ".join(p.value for p in record.phones) if record.phones else "—"
+                    birthday_str = record.birthday.value.strftime("%d.%m.%Y") if record.birthday else "—"
+                    email_str = record.email.value if record.email else "—"
+                    address_str = record.address.value if record.address else "—"
+
+                    content = (
+                        f"[bold magenta]Name:[/] {record.name.value}\n"
+                        f"[bold magenta]Phones:[/] {phones_str}\n"
+                        f"[bold magenta]Birthday:[/] {birthday_str}\n"
+                        f"[bold magenta]Email:[/] {email_str}\n"
+                        f"[bold magenta]Address:[/] {address_str}"
+                    )
+
+                    panel = Panel.fit(content, border_style="#1E90FF")
+                    console.print(panel)
+                    console.print("\n")
             else:
-                print('Not found!')
+                console.print("[bold red]Not found![/bold red]")
 
         while True:
             console.clear()
@@ -341,7 +365,7 @@ class InteractiveMenu:
                 query = self.prompt_input("Enter search query for contacts (or 'back'): ")
                 console.print(Panel(f"Search contacts by string - {query}", style="bold green"))
                 show_search_result(search_records([query], book))
-                pause()                
+                pause()
             elif choice == '2':
                 console.clear()
                 s_choice = self.display(di.display_search_notes_menu, "Search Notes")
