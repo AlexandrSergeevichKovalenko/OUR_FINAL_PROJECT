@@ -55,7 +55,13 @@ class InteractiveMenu:
         console.print(Panel("Add Contact", style="bold green"))
         name = self.prompt_input("Enter contact name (or type 'back' to go back): ")
         if name:
-            add_contact(name, book)
+            if book.find(name):
+                console.print(f"Contact {name} already exist!")
+                pause()                
+                return
+            else: 
+                console.print(add_contact(name, book))
+                pause()
         else:
             return
         while True:
