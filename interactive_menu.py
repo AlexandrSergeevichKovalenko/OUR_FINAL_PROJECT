@@ -69,7 +69,7 @@ class InteractiveMenu:
         console.print(panel)
         return prompt("> ").strip()
 
-    def display_change_contact_menu(self):
+    def display_change_contact_menu(self, name):
         menu_text = (
             "[bold #FFD700]1.[/] Change Name\n"
             "[bold #FFD700]2.[/] Change Phone\n"
@@ -83,7 +83,7 @@ class InteractiveMenu:
             "[bold #FF4500]0.[/] Back\n\n"
             "Enter your choice ([bold #FFD700]1-9(0)[/]): "
         )
-        panel = Panel.fit(menu_text, title="Change Contact", border_style="#1E90FF")
+        panel = Panel.fit(menu_text, title=f"Change Contact: {name}", border_style="#1E90FF")
         console.print(panel)
         return prompt("> ").strip()
 
@@ -180,22 +180,18 @@ class InteractiveMenu:
                 phone = self.prompt_input("Enter phone number (10 digits) (or 'cancel'): ")
                 if phone:
                     console.print(add_contact([name, phone], book))
-                    #self.save_data(book, FILENAME)
             elif sub_choice == '2':
                 email = self.prompt_input("Enter email (or 'cancel'): ")
                 if email:
                     console.print(add_email([name, email], book))
-                    #self.save_data(book, FILENAME)
             elif sub_choice == '3':
                 address = self.prompt_input("Enter address (or 'cancel'): ")
                 if address:
                     console.print(add_address([name, address], book))
-                    #self.save_data(book, FILENAME)
             elif sub_choice == '4':
                 birthday = self.prompt_input("Enter birthday (DD.MM.YYYY) (or 'cancel'): ")
                 if birthday:
                     console.print(set_birthday([name, birthday], book))
-                    #self.save_data(book, FILENAME)
             else:
                 console.print("[bold red]Invalid option, please try again.[/bold red]")
             prompt("Press Enter to continue...")
@@ -204,11 +200,14 @@ class InteractiveMenu:
         console.clear()
         console.print(Panel("Change Contact", style="bold green"))
         name = self.prompt_input("Enter the contact name to change (or 'cancel'): ")
-        if not name:
-            return
+        if not book.find(name):
+             console.print(Panel(f"Contact {name} not found!", style="bold green"))
+             prompt("Press Enter to continue...")
+             return
         while True:
             console.clear()
-            sub_choice = self.display_change_contact_menu()
+            console.print(Panel(f"{book.find(name)}", style="bold green"))            
+            sub_choice = self.display_change_contact_menu(name)
             if sub_choice == '0':
                 break  # Back to Contacts Menu
             elif sub_choice == '1':
@@ -216,25 +215,31 @@ class InteractiveMenu:
                 if new_name:
                     console.print(rename_contact([name, new_name], book))
                 prompt("Press Enter to continue...")
-                                    
+            
+            # Change Phone
             elif sub_choice == '2':
+                
+                old_phone = self.prompt_input("Enter phone number to change (or 'cancel'): ")
                 new_phone = self.prompt_input("Enter new phone number (or 'cancel'): ")
                 if new_phone:
-                    console.print(change_phone([name, "", new_phone], book))
+                    console.print(change_phone([name, old_phone, new_phone], book))
                 prompt("Press Enter to continue...")                    
 
+            # Change Email
             elif sub_choice == '3':
                 new_email = self.prompt_input("Enter new email (or 'cancel'): ")
                 if new_email:
                     console.print(change_email([name, new_email], book))
                 prompt("Press Enter to continue...")
 
+            # Change Address
             elif sub_choice == '4':
                 new_address = self.prompt_input("Enter new address (or 'cancel'): ")
                 if new_address:
                     console.print(change_address([name, new_address], book))
                 prompt("Press Enter to continue...")
 
+            # Change Birthday
             elif sub_choice == '5':
                 new_birthday = self.prompt_input("Enter new birthday (DD.MM.YYYY) (or 'cancel'): ")
                 if new_birthday:
@@ -284,7 +289,6 @@ class InteractiveMenu:
         answer = self.prompt_input("Are you sure you want to delete this contact? (y/n): ")
         if answer and answer.lower() == "y":
             console.print(remove_contact([name], book))
-            #self.save_data(book, FILENAME)
         else:
             console.print("Deletion cancelled.")
         prompt("Press Enter to continue...")
