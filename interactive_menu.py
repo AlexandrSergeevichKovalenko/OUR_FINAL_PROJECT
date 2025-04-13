@@ -1,8 +1,7 @@
 from prompt_toolkit import prompt
 from rich.console import Console
 from rich.panel import Panel
-
-from classes_for_program import *
+from classes_for_program import Note
 from functions_block import (
     add_contact, change_phone, remove_contact, show_all, set_birthday,
     birthdays, add_email, change_email, add_address, change_address, save_data,
@@ -12,8 +11,11 @@ from functions_block import (
 from note_functions import (
     change_note, show_note, show_all_notes, remove_note, search_note
 )
+import information_display as di
+
 
 console = Console()
+
 
 # =========================== Menu Display ===========================
 class InteractiveMenu:
@@ -26,142 +28,20 @@ class InteractiveMenu:
     def __init__(self):
         self.save_data = save_data
 
-    def display_main_menu(self):
-        menu_text = (
-            "[bold #FFD700]1.[/] Manage Contacts\n"
-            "[bold #FFD700]2.[/] Manage Notes\n"
-            "[bold #FFD700]3.[/] Search\n"
-            "[bold #FFD700]4.[/] Help\n"
-            "[bold #FF4500]5.[/] Exit\n\n"
-            "Enter your choice ([bold #FFD700]1-5[/]): "
-        )
-        panel = Panel.fit(menu_text, title="Main Menu", border_style="#1E90FF")
+    def display(self, menu_text, title):
+        panel = Panel.fit(menu_text, title=title, border_style="#1E90FF")
         console.clear()
         console.print(panel)
         return prompt("> ").strip()
 
-    def display_contacts_menu(self):
-        menu_text = (
-            "[bold #FFD700]1.[/] Add Contact\n"
-            "[bold #FFD700]2.[/] Change Contact\n"
-            "[bold #FFD700]3.[/] Show Contact\n"
-            "[bold #FFD700]4.[/] Show All Contacts\n"
-            "[bold #FFD700]5.[/] Remove Contact\n"
-            "[bold #FFD700]6.[/] Birthday in next week\n"
-            "[bold #FFD700]7.[/] Birthday in next X days\n"
-            "[bold #FF4500]8.[/] Back to Main Menu\n\n"
-            "Enter your choice ([bold #FFD700]1-8[/]): "
-        )
-        panel = Panel.fit(menu_text, title="Manage Contacts", border_style="#1E90FF")
-        console.print(panel)
-        return prompt("> ").strip()
-
-    def display_add_contact_menu(self):
-        menu_text = (
-            "[bold #FFD700]1.[/] Add Phone\n"
-            "[bold #FFD700]2.[/] Add Email\n"
-            "[bold #FFD700]3.[/] Add Address\n"
-            "[bold #FFD700]4.[/] Add Birthday\n"
-            "[bold #FF4500]5.[/] Back\n\n"
-            "Enter your choice ([bold #FFD700]1-5[/]): "
-        )
-        panel = Panel.fit(menu_text, title="Add Contact", border_style="#1E90FF")
-        console.print(panel)
-        return prompt("> ").strip()
-
-    def display_change_contact_menu(self):
-        menu_text = (
-            "[bold #FFD700]1.[/] Change Name\n"
-            "[bold #FFD700]2.[/] Change Phone\n"
-            "[bold #FFD700]3.[/] Change Email\n"
-            "[bold #FFD700]4.[/] Change Address\n"
-            "[bold #FFD700]5.[/] Change Birthday\n"
-            "[bold #FFD700]6.[/] Remove Phone\n"
-            "[bold #FFD700]7.[/] Remove Email\n"
-            "[bold #FFD700]8.[/] Remove Address\n"
-            "[bold #FFD700]9.[/] Remove Birthday\n"
-            "[bold #FF4500]0.[/] Back\n\n"
-            "Enter your choice ([bold #FFD700]1-9(0)[/]): "
-        )
-        panel = Panel.fit(menu_text, title="Change Contact", border_style="#1E90FF")
-        console.print(panel)
-        return prompt("> ").strip()
-
-    def display_notes_menu(self):
-        menu_text = (
-            "[bold #FFD700]1.[/] Add Note\n"
-            "[bold #FFD700]2.[/] Change Note\n"
-            "[bold #FFD700]3.[/] Show Note\n"
-            "[bold #FFD700]4.[/] Show All Notes\n"
-            "[bold #FFD700]5.[/] Add Tags to Note\n"
-            "[bold #FFD700]6.[/] Remove Note\n"
-            "[bold #FF4500]7.[/] Back to Main Menu\n\n"
-            "Enter your choice ([bold #FFD700]1-7[/]): "
-        )
-        panel = Panel.fit(menu_text, title="Manage Notes", border_style="#1E90FF")
-        console.print(panel)
-        return prompt("> ").strip()
-
-    def display_search_menu(self):
-        menu_text = (
-            "[bold #FFD700]1.[/] Search Contacts\n"
-            "[bold #FFD700]2.[/] Search Notes\n"
-            "[bold #FF4500]3.[/] Back to Main Menu\n\n"
-            "Enter your choice ([bold #FFD700]1-3[/]): "
-        )
-        panel = Panel.fit(menu_text, title="Search", border_style="#1E90FF")
-        console.print(panel)
-        return prompt("> ").strip()
-
-    def display_search_contacts_menu(self):
-        menu_text = (
-            "[bold #FFD700]1.[/] Search by Name\n"
-            "[bold #FFD700]2.[/] Search by Phone\n"
-            "[bold #FFD700]3.[/] Search by Email\n"
-            "[bold #FFD700]4.[/] Search by Address\n"
-            "[bold #FFD700]5.[/] Search by Birthday\n"
-            "[bold #FF4500]6.[/] Back\n\n"
-            "Enter your choice ([bold #FFD700]1-6[/]): "
-        )
-        panel = Panel.fit(menu_text, title="Search Contacts", border_style="#1E90FF")
-        console.print(panel)
-        return prompt("> ").strip()
-
-    def display_search_notes_menu(self):
-        menu_text = (
-            "[bold #FFD700]1.[/] Search by word\n"
-            "[bold #FFD700]2.[/] search-by-tags-and-sort-by-title\n"
-            "[bold #FF4500]3.[/] Back\n\n"
-            "Enter your choice ([bold #FFD700]1-3[/]): "
-        )
-        panel = Panel.fit(menu_text, title="Search Notes", border_style="#1E90FF")
-        console.print(panel)
-        return prompt("> ").strip()
-
-    def display_help(self):
-        help_text = (
-            "Contacts:\n"
-            "  - Add, Change, Show, Remove contacts; manage phone, email, address, birthday.\n\n"
-            "Notes:\n"
-            "  - Add, Change, Show, Remove notes; add tags; search by tag, title, content.\n\n"
-            "Search:\n"
-            "  - Search Contacts by name, phone, email, address, birthday.\n"
-            "  - Search Notes by tag, title, content.\n\n"
-            "General:\n"
-            "  - Help: Display this help information\n"
-            "  - Exit: Quit the application\n"
-        )
-        panel = Panel.fit(help_text, title="Help Information", border_style="#1E90FF")
-        console.clear()
-        console.print(panel)
-        prompt("Press Enter to return to the Main Menu...")
-
+  
     # =========================== Input Method ===========================
     def prompt_input(self, prompt_text):
         value = prompt(prompt_text).strip()
         if value.lower() == "cancel":
             return None
         return value
+
 
     # =========================== Contacts Handling ===========================
     def handle_add_contact(self, book):
@@ -173,7 +53,7 @@ class InteractiveMenu:
         while True:
             console.clear()
             console.print(f"[bold]Adding data to contact:[/] {name}")
-            sub_choice = self.display_add_contact_menu()
+            sub_choice = self.display(di.display_add_contact_menu, "Add Contact")
             if sub_choice == '5':
                 break  # Back to Contacts Menu
             elif sub_choice == '1':
@@ -200,6 +80,7 @@ class InteractiveMenu:
                 console.print("[bold red]Invalid option, please try again.[/bold red]")
             prompt("Press Enter to continue...")
 
+
     def handle_change_contact(self, book):
         console.clear()
         console.print(Panel("Change Contact", style="bold green"))
@@ -208,7 +89,7 @@ class InteractiveMenu:
             return
         while True:
             console.clear()
-            sub_choice = self.display_change_contact_menu()
+            sub_choice = self.display(di.display_change_contact_menu, "Change Contact")
             if sub_choice == '0':
                 break  # Back to Contacts Menu
             elif sub_choice == '1':
@@ -257,6 +138,7 @@ class InteractiveMenu:
                 console.print(remove_birthday([name, None], book))
                 prompt("Press Enter to continue...")
 
+
     def handle_view_contact(self, book):
         console.clear()
         console.print(Panel("Show Contact", style="bold green"))
@@ -268,6 +150,7 @@ class InteractiveMenu:
             else:
                 console.print(f"[bold red]Contact '{name}' not found.[/bold red]")
         prompt("Press Enter to continue...")
+
 
     def handle_delete_contact(self, book):
         console.clear()
@@ -283,11 +166,13 @@ class InteractiveMenu:
             console.print("Deletion cancelled.")
         prompt("Press Enter to continue...")
 
+
     def handle_birthdays_week(self, book):
         console.clear()
         console.print(Panel("Birthdays in Next Week", style="bold green"))
         console.print(birthdays(book, ["7"]))
         prompt("Press Enter to continue...")
+
 
     def handle_birthdays_x_days(self, book):
         console.clear()
@@ -297,10 +182,11 @@ class InteractiveMenu:
             console.print(birthdays(book, [days]))
         prompt("Press Enter to continue...")
 
+
     def handle_contacts(self, book):
         while True:
             console.clear()
-            choice = self.display_contacts_menu()
+            choice = self.display(di.display_contacts_menu, "Manage Contacts")
             if choice == '8':  # Back to Main Menu
                 break
             elif choice == '1':
@@ -324,11 +210,12 @@ class InteractiveMenu:
                 console.print("[bold red]Invalid option in Contacts Menu.[/bold red]")
                 prompt("Press Enter to continue...")
 
+
     # =========================== Notes Handling ===========================
     def handle_notes(self, notebook):
         while True:
             console.clear()
-            choice = self.display_notes_menu()
+            choice = self.display(di.display_notes_menu, "Manage Notes")
             if choice == '7':  # Back to Main Menu
                 break
             elif choice == '1':
@@ -408,6 +295,7 @@ class InteractiveMenu:
                 console.print("[bold red]Invalid option in Notes Menu.[/bold red]")
                 prompt("Press Enter to continue...")
 
+
     # =========================== Search Handling ===========================
     def handle_search(self, book, notebook):
         def show_search_result(result: list):
@@ -420,7 +308,7 @@ class InteractiveMenu:
 
         while True:
             console.clear()
-            choice = self.display_search_menu()
+            choice = self.display(di.display_search_menu, "Search")
             if choice == '3':  # Back to Main Menu
                 break
             elif choice == '1':
@@ -430,7 +318,7 @@ class InteractiveMenu:
                 prompt("Press Enter to continue...")                
             elif choice == '2':
                 console.clear()
-                s_choice = self.display_search_notes_menu()
+                s_choice = self.display(di.display_search_notes_menu, "Search Notes")
                 if s_choice == '1':
                     search_notes = search_note("search-notes")
                     notes = search_notes(notebook)
@@ -460,11 +348,12 @@ class InteractiveMenu:
                 console.print("[bold red]Invalid option in Search Menu.[/bold red]")
                 prompt("Press Enter to continue...")
 
+
     # =========================== Main Menu Handling ===========================
     def run(self, book, notebook):
         while True:
             console.clear()
-            choice = self.display_main_menu()
+            choice = self.display(di.display_main_menu, "Main Menu")
             if choice == '1':
                 self.handle_contacts(book)
             elif choice == '2':
@@ -473,7 +362,7 @@ class InteractiveMenu:
                 self.handle_search(book, notebook)
             elif choice == '4':
                 console.clear()
-                self.display_help()
+                self.display(di.display_help, "Help Information")
             elif choice == '5':
                 console.print(Panel("Goodbye!", style="bold #FF4500"))
                 break

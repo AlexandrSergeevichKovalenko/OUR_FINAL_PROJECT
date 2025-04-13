@@ -1,5 +1,4 @@
-from classes_for_program import *
-from rich.panel import Panel
+from classes_for_program import Note
 
 
 def add_note(book):
@@ -43,6 +42,7 @@ def add_note(book):
                         return "Note not changed."
         print("Title cannot be empty. Please try again.")
 
+
 def change_note(book):
     """
     Change the content of an existing note.
@@ -63,6 +63,7 @@ def change_note(book):
             return "Note not found."
         print("Please enter a title.")
 
+
 def show_note(book):
     """
     Display the content of a specific note.
@@ -78,6 +79,7 @@ def show_note(book):
             return f"📜 {record}" if record else "Note not found."
         print("Please enter a title.")
 
+
 def show_all_notes(book):
     """
     Display all notes in the notebook.
@@ -85,6 +87,7 @@ def show_all_notes(book):
     """
     result = str(book) if book else "NoteBook is empty"
     return result
+
 
 def remove_note(book, title=None):
     """
@@ -104,6 +107,7 @@ def remove_note(book, title=None):
     else:
         return "Note not found."
 
+
 def search_note(command):
     """
     Sort notes by tags or search for a specific word in the notes by title, note, tags.
@@ -114,6 +118,8 @@ def search_note(command):
         "search-notes" : lambda: input(f"🔍 Enter words to search for:")
         ,"search-by-tags-and-sort-by-title" : lambda: input(f"🏷️ Enter tags to sort by:").lower()
     }
+
+
     def inner(book):
         if book:
             input_text = COMMANDS[command]().strip().lower()
