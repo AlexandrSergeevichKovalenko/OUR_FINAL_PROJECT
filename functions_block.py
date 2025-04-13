@@ -4,7 +4,6 @@ import pickle
 from pathlib import Path
 
 
-# global variable(name of the file) for storaging all program progress
 FILENAME = Path("addressbook.pkl")
 NOTEFILENAME = Path("notebook.pkl")
 
@@ -26,7 +25,6 @@ def add_contact(args, book: AddressBook):
     if phone:
         record.add_phone(phone)
     return message
-
 
 
 @input_error(expected_arg_count=2)
