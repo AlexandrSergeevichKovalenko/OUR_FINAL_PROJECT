@@ -132,7 +132,6 @@ class Record:
                 return
         raise ValueError("The phone number you entered does not exist")
 
-
     def find_phone(self, num_phone:str):
         """Find a phone object in the contact by its value."""
         for phone in self.phones:
@@ -253,7 +252,6 @@ class AddressBook(UserDict):
                     upcoming_birthdays.append({"name": user, "birthday": AddressBook.date_to_string(congratulation_date)})
         return upcoming_birthdays
 
-
     def __str__(self):
         """
         Returns a formatted string with all contacts' data,
@@ -327,13 +325,11 @@ class Note:
         else:
             return f"[bold cyan]Title:[/] {self.title}\n[bold yellow]Note:[/] {note_str}"
 
-
-
 class NoteBook(UserDict):
     """
     A container for storing and managing multiple notes.
     Supports:
-    - add, find, delete notes
+    - 'add', 'find', 'delete notes', 'search notes' and 'search by tags and sort by title'
     """
 
     def add_record(self, note: Note):
@@ -344,19 +340,30 @@ class NoteBook(UserDict):
         """Find a note by title. Returns the Note or None."""
         return self.data.get(title)
 
-    def sorted_notes_by_tags(self):
-        """Sort notes by tags."""
-        return sorted(self.data.values(), key=lambda x: x.tags)
+    def search_by_tags_and_sort_by_title(self, input_tags: str):
+        """Search by tags and sort by title."""
+        input_tags = [tag.strip() for tag in input_tags.split(',') if tag.strip()]
+        pattern = "|".join(tag for tag in input_tags)
+        notes = [
+            note for note in self.data.values() if re.search(pattern , ','.join(note.tags), re.IGNORECASE)
+        ]
+        if not notes:
+            return None
+        result = sorted(notes, key=lambda x: x.title)
+        return result
     
     def search_notes(self, search_string: str):
-        """Search notes by a string in the title or note text or tags."""
-        pattern = fr"\b{re.escape(search_string)}\b"
-        result = [
-            note for note in self.data.values() if re.search(pattern, note.title, re.IGNORECASE) 
-                                                or re.search(pattern, note.note, re.IGNORECASE)
-                                                or re.search(pattern, ','.join(note.tags), re.IGNORECASE)
-        ]
-        return result
+        """Search notes by a word in the title, note text or tags."""
+        if search_string:
+            notes = [
+                note for note in self.data.values() if re.search(search_string, note.title, re.IGNORECASE) 
+                                                    or re.search(search_string, note.note, re.IGNORECASE)
+                                                    or re.search(search_string, ','.join(note.tags), re.IGNORECASE)
+            ]
+            if not notes:
+                return None
+            result = sorted(notes, key=lambda x: x.title)
+            return result
 
     def delete(self, title: str) -> None:
         """Delete a note by title, if it exists."""

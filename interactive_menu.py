@@ -9,7 +9,7 @@ from functions_block import (
     search_records, rename_contact
 )
 from note_functions import (
-    change_note, show_note, show_all_notes, remove_note
+    change_note, show_note, show_all_notes, remove_note, search_note
 )
 
 console = Console()
@@ -128,10 +128,9 @@ class InteractiveMenu:
 
     def display_search_notes_menu(self):
         menu_text = (
-            "[bold #FFD700]1.[/] Search by Tag\n"
-            "[bold #FFD700]2.[/] Search by Title\n"
-            "[bold #FFD700]3.[/] Search by Content\n"
-            "[bold #FF4500]4.[/] Back\n\n"
+            "[bold #FFD700]1.[/] Search by word\n"
+            "[bold #FFD700]2.[/] search-by-tags-and-sort-by-title\n"
+            "[bold #FF4500]3.[/] Back\n\n"
             "Enter your choice ([bold #FFD700]1-4[/]): "
         )
         panel = Panel.fit(menu_text, title="Search Notes", border_style="#1E90FF")
@@ -412,28 +411,27 @@ class InteractiveMenu:
                 console.print(Panel(f"Search contacts by string - {query}", style="bold green"))
                 show_search_result(search_records([query], book))
                 prompt("Press Enter to continue...")                
-#                console.clear()
-#                s_choice = self.display_search_contacts_menu()
-#                if s_choice == '6':
-#                    continue
-#                else:
-
-#                    if query:
-#                        console.print("Search Contacts functionality (not implemented yet)")
-#                    prompt("Press Enter to continue...")
             elif choice == '2':
-                pass
-#                console.clear()
-#                s_choice = self.display_search_notes_menu()
-#                if s_choice == '4':
-#                    continue
-#                else:
-#                    query = self.prompt_input("Enter search query for notes (or 'cancel'): ")
-#                    if query:
-#                        console.print("Search Notes functionality (not implemented yet)")
-#                    prompt("Press Enter to continue...")
-#            else:
-#                console.print("[bold red]Invalid option in Search Menu.[/bold red]")
+                console.clear()
+                s_choice = self.display_search_notes_menu()
+                if s_choice == '1':
+                    search_notes = search_note("search-notes")
+                    search_notes(notebook)
+                    prompt("Press Enter to continue...")
+                elif s_choice == '2':
+                    search_notes = search_note("search-by-tags-and-sort-by-title")
+                    search_notes(notebook)
+                    prompt("Press Enter to continue...")
+                elif s_choice == '3':
+                    continue
+                else:
+                    query = self.prompt_input("Enter search query for notes (or 'cancel'): ")
+                    if query:
+                        console.print("Search Notes functionality (not implemented yet)")
+                    prompt("Press Enter to continue...")
+            else:
+                console.print("[bold red]Invalid option in Search Menu.[/bold red]")
+
                 prompt("Press Enter to continue...")
 
     # =========================== Main Menu Handling ===========================
@@ -457,12 +455,3 @@ class InteractiveMenu:
                 console.print("[bold red]Invalid option in Main Menu.[/bold red]")
                 prompt("Press Enter to continue...")
 
-# =========================== End of InteractiveMenu Class ===========================
-
-# if __name__ == '__main__':
-#     from functions_block import load_data, save_data
-#     from note_functions import NoteBook
-#     book = load_data()
-#     notebook = NoteBook()
-#     menu = InteractiveMenu()
-#     menu.run(book, notebook)
