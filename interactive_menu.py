@@ -66,8 +66,25 @@ class InteractiveMenu:
             return
         while True:
             console.clear()
+
+            record = book.find(name)
+            phones_str = ", ".join(p.value for p in record.phones) if record.phones else "—"
+            birthday_str = record.birthday.value.strftime("%d.%m.%Y") if record.birthday else "—"
+            email_str = record.email.value if record.email else "—"
+            address_str = record.address.value if record.address else "—"
+
+            content = (
+                f"[bold magenta]Name:[/] {record.name.value}\n"
+                f"[bold magenta]Phones:[/] {phones_str}\n"
+                f"[bold magenta]Birthday:[/] {birthday_str}\n"
+                f"[bold magenta]Email:[/] {email_str}\n"
+                f"[bold magenta]Address:[/] {address_str}"
+            )
+            panel = Panel.fit(content, border_style="#1E90FF")
+            console.print(panel)
+
             console.print(f"[bold]Adding data to contact:[/] {name}")
-            sub_choice = self.display(di.display_add_contact_menu, "Add Contact")
+            sub_choice = self.display(di.display_add_contact_menu, "Add Contact", False)
             if sub_choice == '5':
                 break  # Back to Contacts Menu
             elif sub_choice == '1':
