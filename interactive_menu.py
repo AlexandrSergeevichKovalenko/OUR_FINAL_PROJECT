@@ -111,7 +111,7 @@ class InteractiveMenu:
         console.clear()
         console.print(Panel("Change Contact", style="bold green"))
         name = self.prompt_input("Enter the contact name to change (or 'back'): ")
-        if name.lower() == 'back':
+        if not name:
             return
         if not book.find(name):
             console.print(Panel(f"Contact '{name}' not found!", style="bold green"))
