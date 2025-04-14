@@ -1,29 +1,35 @@
 from time import sleep
 from rich.console import Console
 from rich.live import Live
-from random import choices
 
 
 console = Console()
-animals_emojis = ["🐎", "🦇", "🐇", "🐿️", "🦨", "🐦", "🐫", "🦣", "🐘", "🦒", "🐑", "🐖", "🐄", "🐐", "🧚"]
 
 
-def display_animals(path_length: int = 40, animals_count: int = 10, animal_spacing: int = 4, speed: int = 40, emojis: list = animals_emojis):
+def magic_animation(name_emoji: str = "Fairy", path_length: int = 30, speed: int = 20, emoji_right = "🧚", emoji_left = "💻", emoji_moving = "🌟", reverse = False):
     """
-    Display a fixed set of animals moving right to left across the console.
+    Display a fairy sending magic from right to left across the console.
     """
-    console.print("Please wait while the magical creatures gather...", style="bold green")
-
-    selected_animals = choices(emojis, k=animals_count)  # вибираємо 10 різних емодзі
-
+    if reverse:
+         console.print(f"Please wait while the {name_emoji} sets the information...", style="bold green")
+    else:
+         console.print(f"Please wait while the {name_emoji} receives the information...", style="bold green")
+         
     with Live(console=console, refresh_per_second=speed) as live:
-        for i in range(path_length, 0, -1):
+        for i in range(path_length):
             line = [" "] * path_length
-
-            for j in range(animals_count):
-                pos = i - j * animal_spacing
-                if 0 <= pos < path_length:
-                    line[pos] = selected_animals[j]
+            line[0] = emoji_left                   
+            line[-1] = emoji_right                   
+            if reverse:
+                line[0] = emoji_left
+                line[-1] = emoji_right
+                if 0 < path_length - i - 1 < path_length - 1:
+                    line[path_length - i - 1] = emoji_moving 
+            else:
+                line[0] = emoji_left
+                line[-1] = emoji_right
+                if 0 < i < path_length - 1:
+                    line[i] = emoji_moving 
 
             live.update("".join(line))
-            sleep(0.1)
+            sleep(1/speed)
