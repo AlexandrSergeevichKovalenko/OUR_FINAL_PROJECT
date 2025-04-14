@@ -12,7 +12,7 @@ from note_functions import (
     change_note, show_note, remove_note, search_note, add_note
 )
 import information_display as di
-from animation import display_animals
+from animation import magic_animation
 
 console = Console()
 
@@ -309,7 +309,6 @@ class InteractiveMenu:
                 console.print(Panel("Change Note", style="bold green"))
                 self.print_note_titles(notebook)
                 change_note(notebook)
-
                 pause()
             elif choice == '3':
                 console.clear()
@@ -320,7 +319,9 @@ class InteractiveMenu:
             elif choice == '4':
                 console.clear()
                 console.print(Panel("Show All Notes", style="bold green"))
-                console.print(Panel(str(notebook), border_style="blue"))
+                magic_animation(reverse = False)
+                for note in notebook.values():
+                    console.print(Panel.fit(str(note), border_style="blue"))
                 pause()
             elif choice == '5':
                 console.clear()
@@ -328,7 +329,7 @@ class InteractiveMenu:
                 self.print_note_titles(notebook)
                 title = self.prompt_input("Enter note title (or 'back'): ")
                 if not title:
-                    console.print("[bold red]Operation cancelled.[/bold red]")
+                    console.print("[bold red]Back to main menu.[/bold red]")
                     pause()
                     continue
                 record = notebook.find(title)
@@ -340,6 +341,9 @@ class InteractiveMenu:
                 if tags_input is not None:
                     new_tags = tags_input.split(",")
                     record.add_tags(new_tags)
+                    magic_animation(reverse = True)
+                    console.clear()
+                    console.print(Panel.fit(str(record), title=title, border_style="blue"))
                     console.print("[bold green]Tags added successfully![/bold green]")
                 else:
                     console.print("[bold red]Tag addition cancelled.[/bold red]")
@@ -398,7 +402,9 @@ class InteractiveMenu:
                 if s_choice == '1':
                     search_notes = search_note("search-notes")
                     notes = search_notes(notebook)
-                    display_animals()
+                    if notes == "back":
+                        continue
+                    magic_animation(reverse=False)
                     console.clear()
                     if notes:
                         for note in notes:
@@ -406,10 +412,14 @@ class InteractiveMenu:
                     else:
                         console.print("[bold red]No notes found.[/bold red]")
                     pause()
+
                 elif s_choice == '2':
                     search_notes = search_note("search-by-tags-and-sort-by-title")
                     notes = search_notes(notebook)
-                    display_animals()
+                    
+                    if notes == "back":
+                        continue
+                    magic_animation(reverse=False)
                     console.clear()
                     if notes:
                         for note in notes:
@@ -417,13 +427,16 @@ class InteractiveMenu:
                     else:
                         console.print("[bold red]No notes found.[/bold red]")
                     pause()
+
                 elif s_choice == '3':
                     continue
+
                 else:
                     query = self.prompt_input("Enter search query for notes (or 'back'): ")
                     if query:
                         console.print("Search Notes functionality (not implemented yet)")
                     pause()
+
             else:
                 console.print("[bold red]Invalid option in Search Menu.[/bold red]")
                 pause()

@@ -1,6 +1,7 @@
 from classes_for_program import Note
 from rich.console import Console
 from rich.panel import Panel
+from animation import magic_animation
 
 
 console = Console()
@@ -15,7 +16,7 @@ def add_note(book: Note):
     while True:
         title = input("✨ Enter a title or (back) to return to the main menu: ")
         if title == "back":
-            return "Back to main menu"
+            return f"[bold red]Back to main menu.[/]"
         elif title:
             note = input("📜 Enter a note: ")
             tags = input("🏷️ Enter tags or (n): ")
@@ -28,6 +29,7 @@ def add_note(book: Note):
 
             record = book.find(title)
             if record is None:
+                magic_animation(reverse = True)
                 record = Note(title)
                 record.add_note(note)
                 if tags:
@@ -36,7 +38,7 @@ def add_note(book: Note):
                 result = book.find(title)
                 return Panel.fit(
                     f"{result}",
-                    title="Note added",
+                    title=f"[bold green]Note added.[/]",
                     border_style="blue",
                 )
             else:
@@ -44,12 +46,13 @@ def add_note(book: Note):
                     print("A note with this name already exists, do you want to replace it? (y/n)")
                     answer = input().strip().lower()
                     if answer == "y":
+                        magic_animation(reverse = True)
                         record.add_note(note)
                         if tags:
                             record.add_tags(tags)
-                        return "Note changed."
+                        return f"[bold green]Note changed.[/]"
                     elif answer == "n":
-                        return "Note not changed."
+                        return f"[bold red]Note not changed.[/]"
         print("Title cannot be empty. Please try again.")
 
 
@@ -63,7 +66,7 @@ def change_note(book: Note):
     while True:
         title = input("✨ Enter a title or (back) to return to the main menu: ")
         if title == "back":
-            console.print("Back to main menu.")
+            console.print(f"[bold red]Back to main menu.[/]")
             break
         elif title:
             record = book.find(title)
@@ -71,10 +74,11 @@ def change_note(book: Note):
                 console.print(Panel.fit(f"{record}", title="Current note", border_style="blue"))
                 note = input("📜 Enter a new note: ")
                 record.add_note(note)
+                magic_animation(reverse = True)
                 console.clear()
                 console.print(Panel.fit(f"{record}", title="Note changed", border_style="blue"))
                 return
-            console.print("Note not found.")
+            console.print(f"[bold red]Note not found.[/]")
             return
         print("Please enter a title.")
 
@@ -88,13 +92,14 @@ def show_note(book: Note) -> str:
     while True:
         title = input("✨ Enter a title or (back) to return to the main menu: ")
         if title == "back":
-            return "Back to main menu."
+            return f"[bold red]Back to main menu.[/]"
         elif title:
             record = book.find(title)
+            magic_animation(reverse = False)
             if record:
                 return Panel.fit(f"{record}", title=title, border_style="blue")
             else:
-                return "Note not found."
+                return f"[bold red]Note not found.[/]"
         print("Please enter a title.")
 
 
@@ -107,13 +112,14 @@ def remove_note(book):
         title = input("✨ Enter a title to remove or (back) to return to the main menu: ")
         if title:
             if title == "back":
-                return "Back to main menu."
+                return f"[bold red]Back to main menu.[/]"
             record = book.find(title)
             if record:
                 book.delete(title)
-                return "Note removed."
+                magic_animation(reverse = True)
+                return f"[bold green]Note removed.[/]"
             else:
-                return "Note not found."
+                return f"[bold red]Note not found.[/]"
         console.print("Title cannot be empty.", style="bold red")
 
 
@@ -124,23 +130,28 @@ def search_note(command: str) -> callable:
     If the notebook is not empty, sorts the notes by tags and displays them.
     """
     COMMANDS = {
-        "search-notes" : lambda: input(f"🔍 Enter words to search for:")
-        ,"search-by-tags-and-sort-by-title" : lambda: input(f"🏷️ Enter tags to sort by:")
+        "search-notes" : lambda: input("🔍 Enter words to search for or (back):")
+        ,"search-by-tags-and-sort-by-title" : lambda: input("🏷️ Enter tags to sort by or (back):")
     }
 
 
     def inner(book: Note) -> str:
         if book:
-            input_text = COMMANDS[command]()
-            STR = {
-                "search-by-tags-and-sort-by-title": lambda : book.search_by_tags_and_sort_by_title(input_text)
-                ,"search-notes": lambda : book.search_notes(input_text)
-            }   
-            sorted_notes = STR[command]()
-            if sorted_notes:
-                return sorted_notes
-            else:
-                return None
+            while True:
+                input_text = COMMANDS[command]()
+                if input_text:
+                    STR = {
+                    "search-by-tags-and-sort-by-title": lambda : book.search_by_tags_and_sort_by_title(input_text)
+                    ,"search-notes": lambda : book.search_notes(input_text)
+                    }  
+                    if input_text == "back":
+                        return "back"
+                    sorted_notes = STR[command]()
+                    if sorted_notes:
+                        return sorted_notes
+                    else:
+                        return None
+                console.print(f"[bold yellow]Please enter a tag or word.[/]")
         else:
             return None
     return inner
