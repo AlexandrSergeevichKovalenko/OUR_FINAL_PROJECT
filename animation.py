@@ -15,19 +15,15 @@ def magic_animation(name_emoji: str = "Fairy", path_length: int = 30, speed: int
     else:
          console.print(f"Please wait while the {name_emoji} receives the information...", style="bold green")
          
-    with Live(console=console, refresh_per_second=speed) as live:
+    with Live(console=console, refresh_per_second=60) as live:
         for i in range(path_length):
-            line = [" "] * path_length
-            line[0] = emoji_left                   
-            line[-1] = emoji_right                   
+            line = [" "] * path_length   
+            line[0] = emoji_left
+            line[-1] = emoji_right              
             if reverse:
-                line[0] = emoji_left
-                line[-1] = emoji_right
                 if 0 < path_length - i - 1 < path_length - 1:
                     line[path_length - i - 1] = emoji_moving 
             else:
-                line[0] = emoji_left
-                line[-1] = emoji_right
                 if 0 < i < path_length - 1:
                     line[i] = emoji_moving 
 
