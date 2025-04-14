@@ -30,6 +30,7 @@ def add_note(book: Note):
             record = book.find(title)
             if record is None:
                 magic_animation(reverse = True)
+                console.clear()
                 record = Note(title)
                 record.add_note(note)
                 if tags:
@@ -47,6 +48,7 @@ def add_note(book: Note):
                     answer = input().strip().lower()
                     if answer == "y":
                         magic_animation(reverse = True)
+                        console.clear()
                         record.add_note(note)
                         if tags:
                             record.add_tags(tags)
@@ -96,6 +98,7 @@ def show_note(book: Note) -> str:
         elif title:
             record = book.find(title)
             magic_animation(reverse = False)
+            console.clear()
             if record:
                 return Panel.fit(f"{record}", title=title, border_style="blue")
             else:
@@ -117,6 +120,7 @@ def remove_note(book):
             if record:
                 book.delete(title)
                 magic_animation(reverse = True)
+                console.clear()
                 return f"[bold green]Note removed.[/]"
             else:
                 return f"[bold red]Note not found.[/]"
