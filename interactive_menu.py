@@ -320,6 +320,7 @@ class InteractiveMenu:
                 console.clear()
                 console.print(Panel("Show All Notes", style="bold green"))
                 magic_animation(reverse = False)
+                console.clear()
                 for note in notebook.values():
                     console.print(Panel.fit(str(note), border_style="blue"))
                 pause()
